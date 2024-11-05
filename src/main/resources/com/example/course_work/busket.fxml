@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane style="-fx-background-color:  #1e222b;" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox fillWidth="true" prefWidth="1600" spacing="10" style="-fx-background-color:  #1e222b;" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
+        <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: #1e222b;" VBox.vgrow="ALWAYS">
+            <VBox style="-fx-background-color: #1e222b; -fx-padding: 10;">
+                <Text style="-fx-fill: #FFFFFF; -fx-font-weight: bold; -fx-font-size: 16px;" text="Активная корзина" />
+                <!-- Add items in the cart here -->
+                <HBox spacing="10">
+                    <Text style="-fx-fill: #FFFFFF;" text="Item 1" />
+                    <Button style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Заказать" />
+                    <Button style="-fx-background-color: #F44336; -fx-text-fill: white;" text="Удалить" />
+                </HBox>
+                <HBox spacing="10">
+                    <Text style="-fx-fill: #FFFFFF;" text="Item 2" />
+                    <Button style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Заказать" />
+                    <Button style="-fx-background-color: #F44336; -fx-text-fill: white;" text="Удалить" />
+                </HBox>
+                <HBox spacing="10">
+                    <Text style="-fx-fill: #FFFFFF;" text="Item 3" />
+                    <Button style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Заказать" />
+                    <Button style="-fx-background-color: #F44336; -fx-text-fill: white;" text="Удалить" />
+                </HBox>
+            </VBox>
+        </ScrollPane>
+
+        <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color:  #1e222b;" VBox.vgrow="ALWAYS">
+            <VBox style="-fx-background-color:  #1e222b; -fx-padding: 10;">
+                <Text style="-fx-fill: #FFFFFF; -fx-font-weight: bold; -fx-font-size: 16px;" text="История покупок" />
+                <!-- Add purchase history items here -->
+
+                    <Text style="-fx-fill: #FFFFFF;" text="Purchase 1" />
+
+
+                    <Text style="-fx-fill: #FFFFFF;" text="Purchase 2" />
+
+
+                    <Text style="-fx-fill: #FFFFFF;" text="Purchase 3" />
+
+                <!-- Add more purchase history items as needed -->
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</AnchorPane>

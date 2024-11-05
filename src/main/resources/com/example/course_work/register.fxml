@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" prefHeight="400.0" prefWidth="400.0" fx:controller="com.example.course_work.RegisterController">
+    <children>
+        <VBox alignment="CENTER" spacing="10.0" 
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" 
+              AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" style="-fx-background-color: #1b1c21;">
+            <Text text="Registration" style="-fx-font-size: 24px; -fx-fill: white; -fx-font-weight: bold;" />  
+            <TextField fx:id="usernameField" promptText="Username" style="-fx-text-fill: white; -fx-background-color: #1e222b;" />
+            <PasswordField fx:id="passwordField" promptText="Password" style="-fx-text-fill: white; -fx-background-color: #1e222b;"/>
+            <Button text="Register" style="-fx-background-color: #2c84ab;" onAction="#createUser"/>
+            <Text fx:id="authorization" text="есть аккаунт? авторизация" style="-fx-font-size: 10px; -fx-fill: white; -fx-font-weight: bold;"/> 
+        </VBox>
+    </children>
+</AnchorPane>

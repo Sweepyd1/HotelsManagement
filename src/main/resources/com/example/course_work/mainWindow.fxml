@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="573.0" prefWidth="602.0" style=" -fx-background-color: #1e222b;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_work.ChangeWindowController">
+   <children>
+      <HBox prefHeight="38.0" styleClass="header-bar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Pane prefHeight="38.0" prefWidth="118.0" styleClass="menu-item" HBox.hgrow="ALWAYS">
+               <children>
+                  <Text layoutX="13.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="menu-text" text="Главная" wrappingWidth="89.0" />
+               </children>
+            </Pane>
+            <Pane prefHeight="100.0" styleClass="menu-item" HBox.hgrow="ALWAYS">
+               <children>
+                  <Text fx:id="PageTitle" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="menu-text" text="Главная" wrappingWidth="89.0" />
+               </children>
+            </Pane>
+            <!-- Additional Menu Items -->
+         </children>
+      </HBox>
+      <VBox layoutY="-11.0" prefHeight="479.0" prefWidth="219.0" styleClass="sidebar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="-11.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="filter-title" text="Фильры" textAlignment="CENTER" wrappingWidth="176.13000106811523" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="filter-text" text="Вид Спорта" wrappingWidth="176.13000106811523" />
+            <TextField />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="filter-text" text="Цена товара" wrappingWidth="176.13000106811523">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin></Text>
+            <HBox prefHeight="38.0" prefWidth="193.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="filter-text" text="от" textAlignment="CENTER" wrappingWidth="29.767000198364258" />
+                  <TextField prefHeight="26.0" HBox.hgrow="ALWAYS" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="filter-text" text="до" textAlignment="CENTER" wrappingWidth="31.767000198364258" />
+                  <TextField prefHeight="26.0" HBox.hgrow="ALWAYS" />
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="38.0" prefWidth="193.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="filter-text" text="в наличие" textAlignment="CENTER" wrappingWidth="91.51900482177734" />
+                  <CheckBox mnemonicParsing="false">
+                     <HBox.margin>
+                        <Insets left="20.0" top="5.0" />
+                     </HBox.margin></CheckBox>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </HBox>
+            <Pane VBox.vgrow="ALWAYS">
+               <children>
+                  <Button fx:id="mainButton" layoutY="7.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="191.0" style="-fx-background-color: #489abe; -fx-border-color: #489abe; -fx-border-radius: 5;" text="Главная" textFill="WHITE" onAction="#showHomePage" />
+                  <Button fx:id="busketButton"  layoutY="57.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="191.0" style="-fx-background-color: #1e222b; -fx-border-color: #489abe; -fx-border-radius: 5;" text="Корзина" textFill="WHITE" onAction="#showBusketPage" />
+                  <Button fx:id="adminButton"  layoutY="106.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="191.0" style="-fx-background-color: #1e222b; -fx-border-color: #489abe; -fx-border-radius: 5;" text="Админ панель" textFill="WHITE" onAction="#showAdminPanelPage"/>
+               </children></Pane>
+            <HBox prefHeight="48.0" prefWidth="219.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="price-text" text="цена" wrappingWidth="68.13000106811523" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="price-text" text="100 рублей" wrappingWidth="86.13000106811523" />
+               </children>
+            </HBox>
+            <Button mnemonicParsing="false" prefHeight="61.0" prefWidth="216.0" styleClass="action-button" text="Применить">
+               <VBox.margin>
+                  <Insets top="65.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+      <AnchorPane fx:id="mainContent" layoutX="219.0" layoutY="32.0" prefHeight="540.0" prefWidth="383.0" style="-fx-background-color: #1e222b;" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="219.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0" />
+   </children>
+</AnchorPane>

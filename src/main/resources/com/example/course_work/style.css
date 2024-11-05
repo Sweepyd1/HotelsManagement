@@ -1,0 +1,43 @@
+.header-bar {
+    -fx-background-color: #FF4C4C;
+    -fx-border-color:#1e222b;
+}
+
+.menu-item {
+    -fx-background-color: #191b22;
+    -fx-padding: 10px;
+}
+
+.menu-text {
+    -fx-font-size: 19px;
+    -fx-fill: #FFFFFF;
+}
+
+.sidebar {
+    -fx-background-color: #191b22;
+    
+    -fx-padding: 10px;
+}
+
+.filter-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-fill: #FFFFFF;
+}
+
+.filter-text {
+    -fx-font-size: 18px;
+    -fx-fill: #FFFFFF;
+}
+
+.price-text {
+    -fx-font-size: 16px;
+    -fx-fill: #FFFFFF;
+}
+
+.action-button {
+   -fx-background-color: #07ba34;;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}

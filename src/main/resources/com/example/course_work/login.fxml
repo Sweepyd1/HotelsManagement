@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.course_work.LoginController">
+    <children>
+        <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #1b1c21;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <!-- Заголовок "Authorization" -->
+            <Text text="Authorization" style="-fx-font-size: 24px; -fx-fill: white; -fx-font-weight: bold;" />
+            <TextField fx:id="usernameField" promptText="Login" style="-fx-background-color: #1e222b; -fx-text-fill: white;" />
+            <PasswordField fx:id="passwordField" promptText="Password" style="-fx-background-color: #1e222b; -fx-text-fill: white;" />
+            <Button style="-fx-background-color: #2c84ab;" text="Login" onAction="#checkUsernameAndPassword"/>
+            <Text fx:id="register" text="нет аккаунта? регистрация" style="-fx-font-size: 10px; -fx-fill: white; -fx-font-weight: bold;"/> 
+        </VBox>
+    </children>
+</AnchorPane>

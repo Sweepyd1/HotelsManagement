@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" spacing="10"  fx:controller="com.example.course_work.SportCartController">
+        <Label fx:id="titleLabel"  style="-fx-font-size: 16px; -fx-text-fill: #FFFFFF;" />
+        <Label fx:id="descriptionLabel" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;" />
+        <Label fx:id="countLabel" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;" />
+        <Button text="Добавить в корзину" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+</VBox>
