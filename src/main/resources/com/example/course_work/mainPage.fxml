@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600" prefWidth="400" style="-fx-background-color:  #28293c; -fx-padding: 10;" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1">
+<AnchorPane prefHeight="600" prefWidth="400" style="-fx-background-color:  #28293c; -fx-padding: 10;" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.course_work.SessionManager">
     <VBox fx:id="filtersContainer" spacing="15" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="0.0">
 
         <Label text="Выберите даты" textFill="white" />
@@ -33,13 +33,10 @@
 
         <Label text="Удобства" textFill="white" />
         <CheckBox fx:id="wifiCheckBox" style="-fx-background-color: #9ea5db;" text="Wi-Fi" textFill="white" />
-        <CheckBox fx:id="parkingCheckBox" style="-fx-background-color: #9ea5db;" text="Парковка" textFill="white" />
-        <CheckBox fx:id="poolCheckBox" style="-fx-background-color: #9ea5db;" text="Бассейн" textFill="white" />
         <CheckBox fx:id="breakfastCheckBox" style="-fx-background-color: #9ea5db;" text="Завтрак включен" textFill="white" />
-        <CheckBox fx:id="gymCheckBox" style="-fx-background-color: #9ea5db;" text="Фитнес-центр" textFill="white" />
         <CheckBox fx:id="spaCheckBox" style="-fx-background-color: #9ea5db;" text="Спа-процедуры" textFill="white" />
         <CheckBox fx:id="petFriendlyCheckBox" style="-fx-background-color: #9ea5db;" text="Допускаются домашние животные" textFill="white" />
 
-        <Button style="-fx-background-color: #9ea5db;" text="Применить фильтры" textFill="WHITE" />
+        <Button style="-fx-background-color: #9ea5db;" text="Применить фильтры" textFill="WHITE" onAction="#applyFilters" />
     </VBox>
 </AnchorPane>
