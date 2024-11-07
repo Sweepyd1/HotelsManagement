@@ -1,0 +1,7 @@
+.button {
+    -fx-background-image: url("/images/hotel.png"); /* Укажите путь к вашему PNG изображению */
+    -fx-background-size: cover; /* Или используйте contain для сохранения пропорций */
+    -fx-background-repeat: no-repeat; /* Не повторять изображение */
+    -fx-text-fill: white; /* Цвет текста на кнопке */
+    -fx-font-size: 14px; /* Размер шрифта */
+}

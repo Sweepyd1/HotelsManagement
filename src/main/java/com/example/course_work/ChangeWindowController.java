@@ -24,24 +24,30 @@ public class ChangeWindowController {
     @FXML
     public void showHomePage() {
         loadPage("mainPage.fxml", "Главная");
-        highlightButton(mainButton);
+//        highlightButton(mainButton);
     }
 
     @FXML
     public void showBusketPage() {
         loadPage("busket.fxml", "Корзина");
-        highlightButton(busketButton);
+//        highlightButton(busketButton);
     }
 
     @FXML
-    public void showAdminPanelPage() {
-        loadPage("admin.fxml", "Админ");
-        highlightButton(adminButton);
+    public void showAdminRoomsPage() {
+        loadPage("admin_rooms.fxml", "комнаты");
+//        highlightButton(adminButton);
+    }
+
+    @FXML
+    public void showAdminBookingsPage() {
+        loadPage("admin_bookings.fxml", "брони");
+//        highlightButton(adminButton);
     }
 
     private void loadPage(String fxmlFile, String title) {
         try {
-            resetButtonStyles();
+//            resetButtonStyles();
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent page = loader.load();
             mainContent.getChildren().clear();
@@ -54,12 +60,12 @@ public class ChangeWindowController {
         }
     }
 
-    private void highlightButton(Button button) {
-        button.setStyle("-fx-background-color:  #489abe;"); // Цвет выделенной кнопки
-    }
-    private void resetButtonStyles() {
-        mainButton.setStyle("-fx-background-color:#1e222b; -fx-border-color:#489abe;-fx-border-radius:5;"); // Сбрасываем стиль кнопки "Главная"
-        busketButton.setStyle("-fx-background-color:#1e222b; -fx-border-color:#489abe;-fx-border-radius:5;"); // Сбрасываем стиль кнопки "Корзина"
-        adminButton.setStyle("-fx-background-color:#1e222b; -fx-border-color:#489abe;-fx-border-radius:5;"); // Сбрасываем стиль кнопки "Админ Панель"
-    }
+//    private void highlightButton(Button button) {
+//        button.setStyle("-fx-background-color:  #489abe;"); // Цвет выделенной кнопки
+//    }
+//    private void resetButtonStyles() {
+//        mainButton.setStyle("-fx-background-color:#282959; ");
+//        busketButton.setStyle("-fx-background-color:#282959;");
+//        adminButton.setStyle("-fx-background-color:#282959; "); // Сбрасываем стиль кнопки "Админ Панель"
+//    }
 }

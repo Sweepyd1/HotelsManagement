@@ -43,59 +43,64 @@ public class DatabaseSetup {
         try (Statement statement = connection.createStatement()) {
 
             // Создание таблицы пользователей
-            String createUsersTable = "CREATE TABLE IF NOT EXISTS users (" +
-                    "id SERIAL PRIMARY KEY," +
-                    "username VARCHAR(50) NOT NULL UNIQUE," +
-                    "password VARCHAR(255) NOT NULL," +
-                    "role VARCHAR(20) CHECK (role IN ('client', 'employee')) NOT NULL" +
+            String createUsersTable = "CREATE TABLE IF NOT EXISTS Users (" +
+                    "UserID SERIAL PRIMARY KEY," +
+                    "UserSurname VARCHAR(100) NOT NULL," +
+                    "UserName VARCHAR(100) NOT NULL," +
+                    "UserPatronymic VARCHAR(100) NOT NULL," +
+                    "UserLogin VARCHAR(100) UNIQUE NOT NULL," +
+                    "UserPassword VARCHAR(255) NOT NULL," +
+                    "UserRole VARCHAR(50) NOT NULL CHECK (UserRole IN ('client', 'employee'))" +
                     ")";
             statement.executeUpdate(createUsersTable);
 
-            // Создание таблицы категорий
-            String createCategoriesTable = "CREATE TABLE IF NOT EXISTS categories (" +
-                    "id SERIAL PRIMARY KEY," +
-                    "name VARCHAR(50) UNIQUE NOT NULL" +
+            // Создание таблицы комнат
+            String createRoomsTable = "CREATE TABLE IF NOT EXISTS Rooms (" +
+                    "RoomID SERIAL PRIMARY KEY," +
+                    "RoomNumber VARCHAR(10) UNIQUE NOT NULL," +
+                    "RoomDescription TEXT NOT NULL," +
+                    "RoomCapacity INT NOT NULL," +
+                    "RoomCost DECIMAL(19, 4) NOT NULL," +
+                    "RoomStatus VARCHAR(20) NOT NULL CHECK (RoomStatus IN ('available', 'booked', 'maintenance'))," +
+                    "RoomPhoto TEXT" +
                     ")";
-            statement.executeUpdate(createCategoriesTable);
+            statement.executeUpdate(createRoomsTable);
 
-            // Создание таблицы производителей
-            String createManufacturersTable = "CREATE TABLE IF NOT EXISTS manufacturers (" +
-                    "id SERIAL PRIMARY KEY," +
-                    "name VARCHAR(100) UNIQUE NOT NULL," +
-                    "contact_info TEXT" +
+            // Создание таблицы услуг
+            String createServicesTable = "CREATE TABLE IF NOT EXISTS Services (" +
+                    "ServiceID SERIAL PRIMARY KEY," +
+                    "ServiceName VARCHAR(100) NOT NULL," +
+                    "ServiceDescription TEXT NOT NULL," +
+                    "ServiceCost DECIMAL(19, 4) NOT NULL" +
                     ")";
-            statement.executeUpdate(createManufacturersTable);
+            statement.executeUpdate(createServicesTable);
 
-            // Создание таблицы товаров
-            String createProductsTable = "CREATE TABLE IF NOT EXISTS products (" +
-                    "id SERIAL PRIMARY KEY," +
-                    "name VARCHAR(100) NOT NULL," +
-                    "description TEXT NOT NULL," +
-                    "price DECIMAL(10, 2) NOT NULL," +
-                    "stock_quantity INT NOT NULL," +
-                    "photo_url VARCHAR(255)," +
-                    "category_id INT REFERENCES categories(id)," +  // Связь с категориями
-                    "manufacturer_id INT REFERENCES manufacturers(id)" + // Связь с производителями
+            // Создание таблицы бронирований
+            String createBookingsTable = "CREATE TABLE IF NOT EXISTS Bookings (" +
+                    "BookingID SERIAL PRIMARY KEY," +
+                    "UserID INT NOT NULL REFERENCES Users(UserID)," +
+                    "BookingDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                    "CheckInDate DATE NOT NULL," +
+                    "CheckOutDate DATE NOT NULL," +
+                    "BookingStatus VARCHAR(20) NOT NULL CHECK (BookingStatus IN ('confirmed', 'canceled'))" +
                     ")";
-            statement.executeUpdate(createProductsTable);
+            statement.executeUpdate(createBookingsTable);
 
-            // Создание таблицы заказов
-            String createOrdersTable = "CREATE TABLE IF NOT EXISTS orders (" +
-                    "id SERIAL PRIMARY KEY," +
-                    "user_id INT REFERENCES users(id)," +
-                    "order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+            // Создание таблицы бронирования комнат
+            String createBookingRoomsTable = "CREATE TABLE IF NOT EXISTS BookingRooms (" +
+                    "BookingID INT NOT NULL REFERENCES Bookings(BookingID)," +
+                    "RoomID INT NOT NULL REFERENCES Rooms(RoomID)," +
+                    "PRIMARY KEY (BookingID, RoomID)" +
                     ")";
-            statement.executeUpdate(createOrdersTable);
+            statement.executeUpdate(createBookingRoomsTable);
 
-            // Создание таблицы позиций заказа
-            String createOrderItemsTable = "CREATE TABLE IF NOT EXISTS order_items (" +
-                    "id SERIAL PRIMARY KEY," +
-                    "order_id INT REFERENCES orders(id)," +
-                    "product_id INT REFERENCES products(id)," +
-                    "quantity INT NOT NULL," +
-                    "price_at_order_time DECIMAL(10, 2) NOT NULL" + // Хранение цены на момент заказа
+            // Создание таблицы бронирования услуг
+            String createBookingServicesTable = "CREATE TABLE IF NOT EXISTS BookingServices (" +
+                    "BookingID INT NOT NULL REFERENCES Bookings(BookingID)," +
+                    "ServiceID INT NOT NULL REFERENCES Services(ServiceID)," +
+                    "PRIMARY KEY (BookingID, ServiceID)" +
                     ")";
-            statement.executeUpdate(createOrderItemsTable);
+            statement.executeUpdate(createBookingServicesTable);
 
             System.out.println("Таблицы созданы или уже существуют.");
 
@@ -103,6 +108,4 @@ public class DatabaseSetup {
             e.printStackTrace();
         }
     }
-
-
 }
