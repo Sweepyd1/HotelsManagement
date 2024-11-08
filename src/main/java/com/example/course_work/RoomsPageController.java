@@ -6,7 +6,7 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
-public class MainPageController {
+public class RoomsPageController {
 
 
     @FXML
@@ -24,7 +24,7 @@ public class MainPageController {
 
     private void addCards() throws IOException {
         for (int i = 1; i <= 10; i++) {
-            FXMLLoader cardLoader = new FXMLLoader(getClass().getResource("card.fxml"));
+            FXMLLoader cardLoader = new FXMLLoader(getClass().getResource("hotel.fxml"));
             VBox card = cardLoader.load();
             SportCartController cardController = cardLoader.getController();
             cardController.setData("Title " + i, "Description for card " + i, "count"+i);
