@@ -11,7 +11,7 @@
 
 
 .table-view .cell {
-    -fx-text-fill: white; /* Цвет текста в ячейках */
+    -fx-fill-text: white; /* Цвет текста в ячейках */
 }
 
 .table-view .cell:selected {

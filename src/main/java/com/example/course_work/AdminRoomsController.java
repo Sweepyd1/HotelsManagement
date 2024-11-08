@@ -1,9 +1,5 @@
 package com.example.course_work;
 import com.example.course_work.models.Room;
-
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -51,42 +47,42 @@ public class AdminRoomsController {
         roomNumberColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         roomNumberColumn.setOnEditCommit(event -> {
             Room room = event.getRowValue();
-            room.setRoomNumber(event.getNewValue()); // Обновление значения в модели
+            room.setRoomNumber(event.getNewValue());
         });
 
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         descriptionColumn.setOnEditCommit(event -> {
             Room room = event.getRowValue();
-            room.setDescription(event.getNewValue()); // Обновление значения в модели
+            room.setDescription(event.getNewValue());
         });
 
         capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
         capacityColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         capacityColumn.setOnEditCommit(event -> {
             Room room = event.getRowValue();
-            room.setCapacity(event.getNewValue()); // Обновление значения в модели
+            room.setCapacity(event.getNewValue());
         });
 
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         priceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         priceColumn.setOnEditCommit(event -> {
             Room room = event.getRowValue();
-            room.setPrice(event.getNewValue()); // Обновление значения в модели
+            room.setPrice(event.getNewValue());
         });
 
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         statusColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         statusColumn.setOnEditCommit(event -> {
             Room room = event.getRowValue();
-            room.setStatus(event.getNewValue()); // Обновление значения в модели
+            room.setStatus(event.getNewValue());
         });
 
         photoColumn.setCellValueFactory(new PropertyValueFactory<>("photo"));
         photoColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         photoColumn.setOnEditCommit(event -> {
             Room room = event.getRowValue();
-            room.setPhoto(event.getNewValue()); // Обновление значения в модели
+            room.setPhoto(event.getNewValue());
         });
 
         // Установка данных в таблицу (пример)
@@ -102,13 +98,20 @@ public class AdminRoomsController {
         addButton.setOnAction(event -> addRoom());
     }
 
-    // Метод для добавления новой комнаты
+    // Метод для добавления новой комнаты с пустыми значениями
     private void addRoom() {
-        // Пример добавления новой записи с фиксированными данными
-        Room newRoom = new Room("102", "Комната с балконом", 3, 2000.0, "Свободна", "photo2.jpg");
+        // Создание новой пустой комнаты для ввода данных
+        Room newRoom = new Room("", "", 0, 0.0, "", "");
+
+        // Добавление новой комнаты в список
         rooms.add(newRoom);
 
-        // Если нужно обновить таблицу (обычно это не требуется с ObservableList)
-        roomTableView.refresh();
+        // Установка фокуса на новую строку для ввода данных
+        int newIndex = rooms.size() - 1; // Индекс новой комнаты
+        roomTableView.scrollTo(newIndex); // Прокрутка к новой строке
+        roomTableView.getSelectionModel().select(newIndex); // Выбор новой строки
+
+        // Включение режима редактирования для первой колонки новой строки
+        roomTableView.edit(newIndex, roomNumberColumn);
     }
 }

@@ -32,7 +32,7 @@
                     </Button>
                 </children>
             </HBox>
-            <TableView fx:id="roomTableView" editable="true" prefHeight="50000.0" prefWidth="164.0" style="-fx-background-color: #28293c;" styleClass="table-view column-header">
+            <TableView fx:id="roomTableView" editable="true" prefHeight="50000.0" prefWidth="164.0" >
                 <columns>
                     <TableColumn fx:id="roomNumberColumn" prefWidth="75.0" style="-fx-background-color: #39364f; -fx-text-fill: white;" text="Номер комнаты" styleClass="table-view cell " />
 

@@ -26,8 +26,8 @@ public class RoomsPageController {
         for (int i = 1; i <= 10; i++) {
             FXMLLoader cardLoader = new FXMLLoader(getClass().getResource("hotel.fxml"));
             VBox card = cardLoader.load();
-            SportCartController cardController = cardLoader.getController();
-            cardController.setData("Title " + i, "Description for card " + i, "count"+i);
+            RoomCartController cardController = cardLoader.getController();
+            cardController.setRoomData("Title " + i, "Description for card " + i, "count"+i);
             cardsContainer.getChildren().add(card);
         }
     }

@@ -27,6 +27,7 @@ public class LoginController {
     @FXML
     public void initialize() {
 
+
         register.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             try {
                 switchToRegister();

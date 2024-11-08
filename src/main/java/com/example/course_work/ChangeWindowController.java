@@ -29,7 +29,7 @@ public class ChangeWindowController {
 
     @FXML
     public void showBusketPage() {
-        loadPage("busket.fxml", "Корзина");
+        loadPage("rooms.fxml", "Корзина");
 //        highlightButton(busketButton);
     }
 

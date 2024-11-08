@@ -9,6 +9,8 @@ import java.time.LocalDate;
 
 public class SessionManager {
 
+
+
     @FXML
     private DatePicker checkInDatePicker;
 
@@ -25,22 +27,22 @@ public class SessionManager {
     private CheckBox wifiCheckBox;
 
     @FXML
-    private CheckBox parkingCheckBox;
-
-    @FXML
-    private CheckBox poolCheckBox;
-
-    @FXML
     private CheckBox breakfastCheckBox;
 
-    @FXML
-    private CheckBox gymCheckBox;
+    private int userId;
 
     @FXML
     private CheckBox spaCheckBox;
 
     @FXML
     private CheckBox petFriendlyCheckBox;
+
+    public void setId(int id){
+        this.userId = id;
+    }
+    public int getId(){
+        return this.userId;
+    }
 
     // Метод для получения значений из всех элементов управления
     @FXML
@@ -51,10 +53,10 @@ public class SessionManager {
         double maxPrice = maxPriceSlider.getValue();
 
         boolean wifi = wifiCheckBox.isSelected();
-        boolean parking = parkingCheckBox.isSelected();
-        boolean pool = poolCheckBox.isSelected();
+
+
         boolean breakfast = breakfastCheckBox.isSelected();
-        boolean gym = gymCheckBox.isSelected();
+
         boolean spa = spaCheckBox.isSelected();
         boolean petFriendly = petFriendlyCheckBox.isSelected();
 
@@ -64,10 +66,10 @@ public class SessionManager {
         System.out.println("Минимальная цена: " + minPrice);
         System.out.println("Максимальная цена: " + maxPrice);
         System.out.println("Wi-Fi: " + wifi);
-        System.out.println("Парковка: " + parking);
-        System.out.println("Бассейн: " + pool);
+
+
         System.out.println("Завтрак включен: " + breakfast);
-        System.out.println("Фитнес-центр: " + gym);
+
         System.out.println("Спа-процедуры: " + spa);
         System.out.println("Допускаются домашние животные: " + petFriendly);
     }
