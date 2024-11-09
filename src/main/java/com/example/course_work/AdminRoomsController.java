@@ -86,13 +86,15 @@ public class AdminRoomsController {
         });
 
         // Установка данных в таблицу (пример)
-        rooms.add(new Room("101", "Комната с видом на море", 2, 1500.0, "Свободна", "photo1.jpg"));
+//        rooms.add(new Room("101", "Комната с видом на море", 2, 1500.0, "Свободна", "photo1.jpg"));
+        System.out.println(rooms);
+        roomTableView.setEditable(true);
 
         // Установка списка в TableView
         roomTableView.setItems(rooms);
 
         // Разрешение редактирования таблицы
-        roomTableView.setEditable(true);
+
 
         // Обработчик нажатия на кнопку "Добавить"
         addButton.setOnAction(event -> addRoom());
@@ -100,18 +102,21 @@ public class AdminRoomsController {
 
     // Метод для добавления новой комнаты с пустыми значениями
     private void addRoom() {
+        roomTableView.setEditable(true);
         // Создание новой пустой комнаты для ввода данных
-        Room newRoom = new Room("", "", 0, 0.0, "", "");
+        Room newRoom = new Room("reeger", "", 0, 0.0, "", "");
 
         // Добавление новой комнаты в список
         rooms.add(newRoom);
+        roomTableView.setItems(rooms);
+        roomTableView.refresh();
 
         // Установка фокуса на новую строку для ввода данных
-        int newIndex = rooms.size() - 1; // Индекс новой комнаты
-        roomTableView.scrollTo(newIndex); // Прокрутка к новой строке
-        roomTableView.getSelectionModel().select(newIndex); // Выбор новой строки
+//        int newIndex = rooms.size() - 1; // Индекс новой комнаты
+//        roomTableView.scrollTo(newIndex); // Прокрутка к новой строке
+//        roomTableView.getSelectionModel().select(newIndex); // Выбор новой строки
 
         // Включение режима редактирования для первой колонки новой строки
-        roomTableView.edit(newIndex, roomNumberColumn);
+//        roomTableView.edit(newIndex, roomNumberColumn);
     }
 }
