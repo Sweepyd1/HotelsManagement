@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -7,14 +8,15 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_work.AllRoomsController">
    <children>
-      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: #28293c;" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ScrollPane fitToHeight="true" fitToWidth="true"  style="-fx-background-color: #28293c;" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
-            <GridPane fx:id="gridPane" maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: #28293c;">
+            <GridPane fx:id="gridPane" maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: #28293c;" hgap="10" vgap="10"> <!-- Установлены отступы между карточками -->
                <rowConstraints>
-                  <RowConstraints minHeight="200.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints vgrow="SOMETIMES"/>
                </rowConstraints>
             </GridPane>
          </content>
       </ScrollPane>
+      <Label prefHeight="24.0" prefWidth="424.0" text="Свободные комнаты" textFill="WHITE"/>
    </children>
 </AnchorPane>

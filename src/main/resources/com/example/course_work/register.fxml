@@ -11,7 +11,9 @@
     <children>
         <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #2a2b3f;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <Text style="-fx-font-size: 24px; -fx-fill: white; -fx-font-weight: bold;" text="Registration" />  
-            <TextField fx:id="usernameField" promptText="Username" style="-fx-text-fill: white; -fx-background-color: #39364f; -fx-padding: 10;" />
+            <TextField fx:id="loginField" promptText="login" style="-fx-text-fill: white; -fx-background-color: #39364f; -fx-padding: 10;" />
+            <TextField fx:id="surnameField" promptText="surname" style="-fx-text-fill: white; -fx-background-color: #39364f; -fx-padding: 10;" />
+            <TextField fx:id="nameField" promptText="name" style="-fx-text-fill: white; -fx-background-color: #39364f; -fx-padding: 10;" />
             <PasswordField fx:id="passwordField" promptText="Password" style="-fx-text-fill: white; -fx-background-color: #39364f; -fx-padding: 10;" />
             <Button onAction="#createUser" prefHeight="38.0" prefWidth="135.0" style="-fx-background-color: #9ea5db; -fx-padding: 10;" text="Register" textFill="WHITE" />
             <Text fx:id="authorization" style="-fx-font-size: 10px; -fx-fill: white; -fx-font-weight: bold;" text="есть аккаунт? авторизация" /> 

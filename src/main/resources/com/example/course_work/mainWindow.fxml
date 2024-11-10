@@ -26,7 +26,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="myBookingRooms" mnemonicParsing="false" onAction="#showBusketPage" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #9ea5db;" text="мои брони" textFill="WHITE">
+            <Button fx:id="myBookingRooms" mnemonicParsing="false" onAction="#showBookedPage" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #9ea5db;" text="мои брони" textFill="WHITE">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>

@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+
 public class AllRoomsController {
     @FXML
     private GridPane gridPane;
@@ -20,7 +21,7 @@ public class AllRoomsController {
     public void initialize() {
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
             RoomCrud roomCrud = new RoomCrud(connection);
-            List<Room> freeRooms = roomCrud.getFreeRooms();
+            List<Room> freeRooms = roomCrud.getFilteredRooms();
 
             // Проверяем, есть ли свободные комнаты
             if (freeRooms != null && !freeRooms.isEmpty()) {
@@ -33,7 +34,8 @@ public class AllRoomsController {
 
                         // Получение контроллера для комнаты
                         RoomCartController roomController = loader.getController();
-                        roomController.setRoomData(room.getRoomNumber(), room.getDescription(), "Количество: " + room.getCapacity()); // Используем данные из базы
+                        String imagePath = "hotel (1).png";
+                        roomController.setRoomData(room.getRoomNumber(), room.getDescription(), "Количество: " + room.getCapacity(), imagePath); // Используем данные из базы
 
                         // Определяем позицию в GridPane
                         int column = i % 3; // Определяем колонку (0, 1 или 2)

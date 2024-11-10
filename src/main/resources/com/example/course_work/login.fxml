@@ -12,7 +12,7 @@
         <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #2a2b3f;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <!-- Заголовок "Authorization" -->
             <Text style="-fx-font-size: 24px; -fx-fill: white; -fx-font-weight: bold;" text="Authorization" />
-            <TextField fx:id="usernameField" prefHeight="38.0" prefWidth="200.0" promptText="Login" style="-fx-background-color: #39364f; -fx-text-fill: white; -fx-padding: 10;" />
+            <TextField fx:id="loginField" prefHeight="38.0" prefWidth="200.0" promptText="Login" style="-fx-background-color: #39364f; -fx-text-fill: white; -fx-padding: 10;" />
             <PasswordField fx:id="passwordField" promptText="Password" style="-fx-background-color: #39364f; -fx-text-fill: white; -fx-padding: 10;" />
             <Button onAction="#checkUsernameAndPassword" prefHeight="38.0" prefWidth="134.0" style="-fx-background-color: #9ea5db; -fx-padding: 10;" text="Login" textFill="WHITE" />
             <Text fx:id="register" style="-fx-font-size: 10px; -fx-fill: white; -fx-font-weight: bold;" text="нет аккаунта? регистрация" /> 

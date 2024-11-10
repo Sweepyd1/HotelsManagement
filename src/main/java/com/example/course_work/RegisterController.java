@@ -17,7 +17,11 @@ import javafx.scene.text.Text;
 public class RegisterController {
 
     @FXML
-    private TextField usernameField;
+    private TextField loginField;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField surnameField;
 
     @FXML
     private PasswordField passwordField;
@@ -50,20 +54,24 @@ public class RegisterController {
 
     @FXML
     private void createUser() {
-        String username = usernameField.getText();
+        String name = nameField.getText();
         String password = passwordField.getText();
+        String login = loginField.getText();
+        String surname = surnameField.getText();
 
 
-        if (username.isEmpty() || password.isEmpty()) {
+        if (login.isEmpty() || password.isEmpty() ||name.isEmpty()||surname.isEmpty()) {
             System.out.println("Все поля должны быть заполнены.");
             return;
         }
 
 
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/sport_shop", "postgres", "sweepy2006")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
             UserCrud userCrud = new UserCrud(connection);
-            userCrud.createUser(username, password, "client");
+            userCrud.createUser(name, password,login,surname,"user");
             try {
+
+                SessionManager.getInstance().setId(userCrud.getUserId(login, password));
                 switchToMain();
             } catch (IOException e) {
 

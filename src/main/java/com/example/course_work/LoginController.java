@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 public class LoginController {
 
     @FXML
-    TextField usernameField;
+    TextField loginField;
 
     @FXML
     PasswordField passwordField;
@@ -51,21 +51,24 @@ public class LoginController {
 
     @FXML
     private void checkUsernameAndPassword(){
-        String username = usernameField.getText();
+        String login = loginField.getText();
         String password = passwordField.getText();
 
 
-        if (username.isEmpty() || password.isEmpty()) {
+        if (login.isEmpty() || password.isEmpty()) {
             System.out.println("Все поля должны быть заполнены.");
             return;
         }
 
 
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/sport_shop", "postgres", "sweepy2006")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
             UserCrud userCrud = new UserCrud(connection);
-            boolean isExist = userCrud.userExists(username, password);
+            boolean isExist = userCrud.userExists(login, password);
             if (isExist){
                 try {
+                    SessionManager.getInstance().setId(userCrud.getUserId(login, password));
+
+
                     switchToMain();
                 } catch (IOException e) {
 

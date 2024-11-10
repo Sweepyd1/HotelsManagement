@@ -15,12 +15,14 @@ public class UserCrud {
     }
 
     // Создание нового пользователя
-    public void createUser(String username, String password, String role) throws SQLException {
-        String sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
+    public void createUser(String name, String password,String login, String surname, String role) throws SQLException {
+        String sql = "INSERT INTO users (username, userpassword,userlogin, usersurname,userrole ) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, username);
+            pstmt.setString(1, name);
             pstmt.setString(2, password);
-            pstmt.setString(3, role);
+            pstmt.setString(3, login);
+            pstmt.setString(4, surname);
+            pstmt.setString(5, role);
             pstmt.executeUpdate();
             System.out.println("Пользователь успешно создан.");
         }
@@ -28,12 +30,12 @@ public class UserCrud {
 
     // Получение пользователя по ID
     public User getUserById(int id) throws SQLException {
-        String sql = "SELECT * FROM users WHERE id = ?";
+        String sql = "SELECT * FROM users WHERE userid = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"), rs.getString("role"));
+                return new User(rs.getInt("userid"), rs.getString("username"), rs.getString("userpassword"), rs.getString("userrole"));
             }
         }
         return null; // Пользователь не найден
@@ -71,9 +73,9 @@ public class UserCrud {
         }
     }
 
-    // Проверка существования пользователя по имени
+
     public boolean userExists(String username, String password) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM users WHERE username = ? and password = ?";
+        String sql = "SELECT COUNT(*) FROM users WHERE userlogin = ? and userpassword = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
@@ -83,5 +85,18 @@ public class UserCrud {
             }
         }
         return false;
+    }
+
+    public Integer getUserId(String username, String password) throws SQLException {
+        String sql = "SELECT userid FROM users WHERE userlogin = ? AND userpassword = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("userid"); // Возвращаем ID пользователя
+            }
+        }
+        return null; // Если пользователь не найден, возвращаем null
     }
 }

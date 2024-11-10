@@ -27,7 +27,8 @@ public class RoomsPageController {
             FXMLLoader cardLoader = new FXMLLoader(getClass().getResource("hotel.fxml"));
             VBox card = cardLoader.load();
             RoomCartController cardController = cardLoader.getController();
-            cardController.setRoomData("Title " + i, "Description for card " + i, "count"+i);
+            String imagePath = "hotel (1).png";
+            cardController.setRoomData("Title " + i, "Description for card " + i, "count"+i,imagePath);
             cardsContainer.getChildren().add(card);
         }
     }

@@ -4,52 +4,81 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Room {
-    private final SimpleStringProperty roomNumber;
-    private final SimpleStringProperty description;
-    private final SimpleIntegerProperty capacity;
-    private final SimpleDoubleProperty price;
-    private final SimpleStringProperty status;
-    private final SimpleStringProperty photo;
+    private String roomNumber;
+    private String description;
+    private int capacity;
+    private double price;
 
-    public Room(String roomNumber, String description, int capacity, double price, String status, String photo) {
-        this.roomNumber = new SimpleStringProperty(roomNumber);
-        this.description = new SimpleStringProperty(description);
-        this.capacity = new SimpleIntegerProperty(capacity);
-        this.price = new SimpleDoubleProperty(price);
-        this.status = new SimpleStringProperty(status);
-        this.photo = new SimpleStringProperty(photo);
+    private String photo;
+
+    public Room(String roomNumber, String description, int capacity, double price, String photo) {
+        this.roomNumber = roomNumber;
+        this.description = description;
+        this.capacity = capacity;
+        this.price = price;
+        this.photo = photo;
     }
 
-    public String getRoomNumber() { return roomNumber.get(); }
-    public void setRoomNumber(String value) { roomNumber.set(value); }
-
-    public String getDescription() { return description.get(); }
-    public void setDescription(String value) { description.set(value); }
-
-    public int getCapacity() { return capacity.get(); }
-    public void setCapacity(int value) { capacity.set(value); }
-
-    public double getPrice() { return price.get(); }
-
-    public void setPrice(Double value) {
-        price.set(value);
+    // Геттер для номера комнаты
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
-    public String getStatus() { return status.get(); }
-    public void setStatus(String value) { status.set(value); }
+    // Сеттер для номера комнаты
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
 
-    public String getPhoto() { return photo.get(); }
-    public void setPhoto(String value) { photo.set(value); }
+    // Геттер для описания
+    public String getDescription() {
+        return description;
+    }
 
+    // Сеттер для описания
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    // Геттер для вместимости
+    public int getCapacity() {
+        return capacity;
+    }
+
+    // Сеттер для вместимости
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    // Геттер для цены
+    public double getPrice() {
+        return price;
+    }
+
+    // Сеттер для цены
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    // Геттер для статуса
+
+
+    // Геттер для фото
+    public String getPhoto() {
+        return photo;
+    }
+
+    // Сеттер для фото
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
     @Override
     public String toString() {
         return "Room{" +
-                "roomNumber='" + roomNumber.get() + '\'' +
-                ", description='" + description.get() + '\'' +
-                ", capacity=" + capacity.get() +
-                ", price=" + price.get() +
-                ", status='" + status.get() + '\'' +
-                ", photo='" + photo.get() + '\'' +
+                "roomNumber='" + roomNumber + '\'' +
+                ", description='" + description + '\'' +
+                ", capacity=" + capacity +
+                ", price=" + price +
+                ", photo='" + photo + '\'' +
                 '}';
     }
 }

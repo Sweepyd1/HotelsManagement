@@ -4,73 +4,189 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Spinner;
 
 import java.time.LocalDate;
-
 public class SessionManager {
 
+    public static SessionManager instance;
 
+    public int userId;
 
-    @FXML
-    private DatePicker checkInDatePicker;
+    public LocalDate checkInDate;
+    public LocalDate checkOutDate;
 
-    @FXML
-    private DatePicker checkOutDatePicker;
+    // Новые параметры
+    public double minPrice;
+    public double maxPrice;
 
-    @FXML
-    private Slider minPriceSlider;
+    public boolean wifi;
+    public boolean breakfast;
+    public boolean spa;
+    public boolean petFriendly;
 
-    @FXML
-    private Slider maxPriceSlider;
-
-    @FXML
-    private CheckBox wifiCheckBox;
-
-    @FXML
-    private CheckBox breakfastCheckBox;
-
-    private int userId;
+    public int capacity;
 
     @FXML
-    private CheckBox spaCheckBox;
+    public DatePicker checkInDatePicker;
 
     @FXML
-    private CheckBox petFriendlyCheckBox;
+    public DatePicker checkOutDatePicker;
 
-    public void setId(int id){
+    @FXML
+    public Slider minPriceSlider;
+
+    @FXML
+    public Slider maxPriceSlider;
+
+    @FXML
+    public CheckBox wifiCheckBox;
+
+    @FXML
+    public CheckBox breakfastCheckBox;
+
+    @FXML
+    public CheckBox spaCheckBox;
+
+    @FXML
+    public CheckBox petFriendlyCheckBox;
+
+    @FXML
+    private Spinner<Integer> capacitySpinner;
+
+    // Приватный конструктор для предотвращения создания экземпляров извне
+    public SessionManager() {}
+
+    // Метод для получения единственного экземпляра класса
+    public static SessionManager getInstance() {
+        if (instance == null) {
+            instance = new SessionManager();
+        }
+        return instance;
+    }
+
+    // Методы для установки и получения идентификатора пользователя
+    public void setId(int id) {
         this.userId = id;
     }
-    public int getId(){
+
+    public int getId() {
         return this.userId;
     }
 
-    // Метод для получения значений из всех элементов управления
+    // Методы для установки и получения дат
+    public void setInDate(LocalDate in) {
+        this.checkInDate = in;
+    }
+
+    public LocalDate getInDate() {
+        return this.checkInDate;
+    }
+
+    public void setOutDate(LocalDate out) {
+        this.checkOutDate = out;
+    }
+
+    public LocalDate getOutDate() {
+        return this.checkOutDate;
+    }
+
+    // Новые сеттеры и геттеры для дополнительных параметров
+
+    public void setMinPrice(double min) {
+        this.minPrice = min;
+    }
+
+    public double getMinPrice() {
+        return this.minPrice;
+    }
+
+    public void setMaxPrice(double max) {
+        this.maxPrice = max;
+    }
+
+    public double getMaxPrice() {
+        return this.maxPrice;
+    }
+
+    public void setWifi(boolean wifi) {
+        this.wifi = wifi;
+    }
+
+    public boolean isWifi() {
+        return this.wifi;
+    }
+
+    public void setBreakfast(boolean breakfast) {
+        this.breakfast = breakfast;
+    }
+
+    public boolean isBreakfast() {
+        return this.breakfast;
+    }
+
+    public void setSpa(boolean spa) {
+        this.spa = spa;
+    }
+
+    public boolean isSpa() {
+        return this.spa;
+    }
+
+    public void setPetFriendly(boolean petFriendly) {
+        this.petFriendly = petFriendly;
+    }
+
+    public boolean isPetFriendly() {
+        return this.petFriendly;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getCapacity() {
+        return this.capacity;
+    }
+
+
     @FXML
     public void applyFilters() {
+        // Получаем значения из элементов управления
         LocalDate checkInDate = checkInDatePicker.getValue();
         LocalDate checkOutDate = checkOutDatePicker.getValue();
         double minPrice = minPriceSlider.getValue();
         double maxPrice = maxPriceSlider.getValue();
-
         boolean wifi = wifiCheckBox.isSelected();
-
-
         boolean breakfast = breakfastCheckBox.isSelected();
-
         boolean spa = spaCheckBox.isSelected();
         boolean petFriendly = petFriendlyCheckBox.isSelected();
+        int selectedCapacity = capacitySpinner.getValue(); // Получаем выбранное количество мест
 
-        // Здесь вы можете использовать полученные значения, например, для фильтрации данных
-        System.out.println("Дата заезда: " + checkInDate);
-        System.out.println("Дата выезда: " + checkOutDate);
-        System.out.println("Минимальная цена: " + minPrice);
-        System.out.println("Максимальная цена: " + maxPrice);
-        System.out.println("Wi-Fi: " + wifi);
+        // Устанавливаем значения в SessionManager
+        SessionManager sessionManager = SessionManager.getInstance();
+        sessionManager.setInDate(checkInDate);
+        sessionManager.setOutDate(checkOutDate);
+        sessionManager.setMinPrice(minPrice);
+        sessionManager.setMaxPrice(maxPrice);
+        sessionManager.setWifi(wifi);
+        sessionManager.setBreakfast(breakfast);
+        sessionManager.setSpa(spa);
+        sessionManager.setPetFriendly(petFriendly);
+        sessionManager.setCapacity(selectedCapacity);
 
+        // Логика применения фильтров...
+        System.out.println("Выбрано количество мест: " + selectedCapacity);
 
-        System.out.println("Завтрак включен: " + breakfast);
-
-        System.out.println("Спа-процедуры: " + spa);
-        System.out.println("Допускаются домашние животные: " + petFriendly);
+        System.out.println("Filters applied: " +
+                "Check-in: " + checkInDate +
+                ", Check-out: " + checkOutDate +
+                ", Min Price: " + minPrice +
+                ", Max Price: " + maxPrice +
+                ", WiFi: " + wifi +
+                ", Breakfast: " + breakfast +
+                ", Spa: " + spa +
+                ", Pet Friendly: " + petFriendly);
     }
+
 }

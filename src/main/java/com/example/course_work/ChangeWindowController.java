@@ -3,20 +3,25 @@ package com.example.course_work;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
+import java.awt.desktop.SystemEventListener;
+import java.time.LocalDate;
+
 public class ChangeWindowController {
 
+    public Button myBookingRooms;
     @FXML
     private AnchorPane mainContent;
     @FXML
-    private Button mainButton; // Кнопка "Главная"
+    public Button mainButton; // Кнопка "Главная"
     @FXML
-    private Button busketButton; // Кнопка "Корзина"
+    public Button busketButton; // Кнопка "Корзина"
     @FXML
-    private Button adminButton; // Кнопка "Админ Панель"
+    public Button adminButton; // Кнопка "Админ Панель"
     @FXML
     private Text PageTitle;
 
@@ -27,10 +32,37 @@ public class ChangeWindowController {
 //        highlightButton(mainButton);
     }
 
+
+    @FXML
+    public void showBookedPage() {
+        loadPage("mybooked.fxml", "Главная");
+//        highlightButton(mainButton);
+    }
+
     @FXML
     public void showBusketPage() {
-        loadPage("rooms.fxml", "Корзина");
-//        highlightButton(busketButton);
+        LocalDate in =  SessionManager.getInstance().getInDate();
+        LocalDate out =  SessionManager.getInstance().getOutDate();
+        Boolean wifi = SessionManager.getInstance().isWifi();
+
+        System.out.println(in);
+        System.out.println(out);
+        System.out.println(wifi);
+
+
+
+        if (in == null || out == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText(null); // Убираем заголовок
+            alert.setContentText("Пожалуйста, выберите даты заезда и выезда."); // Текст сообщения
+
+            // Отображение окна
+            alert.showAndWait();
+
+        } else {
+            loadPage("rooms.fxml", "Корзина");
+        }
     }
 
     @FXML
