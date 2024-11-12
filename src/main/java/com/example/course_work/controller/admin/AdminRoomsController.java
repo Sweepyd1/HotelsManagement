@@ -1,4 +1,4 @@
-package com.example.course_work;
+package com.example.course_work.controller.admin;
 import com.example.course_work.models.Room;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +15,6 @@ import javafx.util.converter.IntegerStringConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.function.BiConsumer;
 
 public class AdminRoomsController implements Initializable {
 
@@ -57,7 +56,9 @@ public class AdminRoomsController implements Initializable {
         setupColumn(statusColumn, "status");
         setupColumn(photoColumn, "photo");
 
+        roomTableView.refresh();
         roomTableView.setItems(rooms);
+
         addButton.setOnAction(event -> addRoom());
     }
 

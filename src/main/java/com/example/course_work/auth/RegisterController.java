@@ -1,4 +1,4 @@
-package com.example.course_work;
+package com.example.course_work.auth;
 
 
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.example.course_work.App;
+import com.example.course_work.SessionManager;
 import com.example.course_work.database.UserCrud;
 
 import javafx.fxml.FXML;
@@ -43,7 +45,7 @@ public class RegisterController {
 
     @FXML
     private void switchToLogin() throws IOException {
-        App.setRoot("login");
+        App.setRoot("auth/login");
     }
 
     private void switchToMain() throws IOException {

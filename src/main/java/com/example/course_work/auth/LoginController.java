@@ -1,10 +1,12 @@
-package com.example.course_work;
+package com.example.course_work.auth;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.example.course_work.App;
+import com.example.course_work.SessionManager;
 import com.example.course_work.database.UserCrud;
 
 import javafx.fxml.FXML;
@@ -45,7 +47,7 @@ public class LoginController {
 
     @FXML
     private void switchToRegister() throws IOException {
-        App.setRoot("register");
+        App.setRoot("auth/register");
     }
 
 

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane style="-fx-background-color:  #1e222b;" stylesheets="@table.css" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_work.AdminRoomsController">
+<AnchorPane style="-fx-background-color:  #1e222b;" stylesheets="@styles/table.css" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_work.controller.admin.AdminRoomsController">
     <VBox prefHeight="200.0" prefWidth="121.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
         <children>
@@ -31,7 +31,7 @@
                     </Button>
                 </children>
             </HBox>
-            <TableView fx:id="roomTableView" editable="true" prefHeight="50000.0" prefWidth="164.0" stylesheets="@table.css">
+            <TableView fx:id="roomTableView" editable="true" prefHeight="50000.0" prefWidth="164.0" stylesheets="@styles/table.css">
                 <columns>
                     <TableColumn fx:id="roomNumberColumn" prefWidth="75.0" text="Номер комнаты" />
 
