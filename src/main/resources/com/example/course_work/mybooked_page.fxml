@@ -17,6 +17,6 @@
                 </GridPane>
             </content>
         </ScrollPane>
-        <Label prefHeight="24.0" prefWidth="424.0" text="Свободные комнаты" textFill="WHITE" />
+
     </children>
 </AnchorPane>

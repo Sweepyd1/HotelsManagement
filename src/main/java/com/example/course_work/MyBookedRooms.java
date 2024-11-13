@@ -29,7 +29,7 @@ public class MyBookedRooms {
                         Room room = freeRooms.get(i);
                         try {
 
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("bookedroom.fxml")); // Укажите правильный путь к вашему FXML
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("bookedroom_management.fxml")); // Укажите правильный путь к вашему FXML
                             VBox roomVBox = loader.load();
 
 

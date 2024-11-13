@@ -1,118 +1,163 @@
 package com.example.course_work.controller.admin;
-import com.example.course_work.models.Room;
+
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+
+import javafx.scene.control.*;
+
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+
+
+
+
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class AdminRoomsController implements Initializable {
+public class AdminRoomsController {
+    @FXML
+    private TableView<String[]> tableView;
 
     @FXML
-    private TableView<Room> roomTableView;
+    private TableColumn<String[], String> roomNumberColumn;
 
     @FXML
-    private TableColumn<Room, String> roomNumberColumn;
+    private TableColumn<String[], String> descriptionColumn;
 
     @FXML
-    private TableColumn<Room, String> descriptionColumn;
+    private TableColumn<String[], String> capacityColumn;
 
     @FXML
-    private TableColumn<Room, Integer> capacityColumn;
+    private TableColumn<String[], String> costColumn;
 
     @FXML
-    private TableColumn<Room, Double> priceColumn;
+    private TableColumn<String[], String> photoColumn;
+
+    private ObservableList<String[]> data;
 
     @FXML
-    private TableColumn<Room, String> statusColumn;
+    public void initialize() {
+        data = FXCollections.observableArrayList();
+        tableView.setItems(data);
 
-    @FXML
-    private TableColumn<Room, String> photoColumn;
+        roomNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[0]));
+        descriptionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[1]));
+        capacityColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[2]));
+        costColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[3]));
+        photoColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[4]));
 
-    @FXML
-    private Button addButton;
-
-    // Список комнат
-    private ObservableList<Room> rooms = FXCollections.observableArrayList();
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        roomTableView.setEditable(true);
-
-        setupColumn(roomNumberColumn, "roomNumber");
-        setupColumn(descriptionColumn, "description");
-        setupIntegerColumn(capacityColumn, "capacity");
-        setupDoubleColumn(priceColumn, "price");
-        setupColumn(statusColumn, "status");
-        setupColumn(photoColumn, "photo");
-
-        roomTableView.refresh();
-        roomTableView.setItems(rooms);
-
-        addButton.setOnAction(event -> addRoom());
+        // Add a listener for mouse clicks on the table view
+        tableView.setOnMouseClicked(this::handleRowSelection);
     }
 
-    private void setupColumn(TableColumn<Room, String> column, String propertyName) {
-        column.setCellValueFactory(new PropertyValueFactory<>(propertyName));
-        column.setCellFactory(TextFieldTableCell.forTableColumn());
-        column.setOnEditCommit(event -> {
-            Room room = event.getRowValue();
-            switch (propertyName) {
-                case "roomNumber":
-                    room.setRoomNumber(event.getNewValue());
-                    break;
-                case "description":
-                    room.setDescription(event.getNewValue());
-                    break;
+    @FXML
+    private void handleAddButtonAction() {
+        String[] roomDetails = showInputDialog("Добавить комнату", "Введите данные комнаты:");
+        if (roomDetails != null) {
+            data.add(roomDetails);
+        }
+    }
 
-                case "photo":
-                    room.setPhoto(event.getNewValue());
-                    break;
+    @FXML
+    private void handleEditButtonAction() {
+        String[] selectedRoom = tableView.getSelectionModel().getSelectedItem();
+        if (selectedRoom != null) {
+            String[] updatedDetails = showInputDialog("Редактировать комнату", "Введите новые данные комнаты:", selectedRoom);
+            if (updatedDetails != null) {
+                int index = data.indexOf(selectedRoom);
+                data.set(index, updatedDetails);
             }
-            System.out.println("Updated " + propertyName + ": " + event.getNewValue());
-        });
+        } else {
+            showAlert("Ошибка", "Пожалуйста, выберите комнату для редактирования.");
+        }
     }
 
-    private void setupIntegerColumn(TableColumn<Room, Integer> column, String propertyName) {
-        column.setCellValueFactory(new PropertyValueFactory<>(propertyName));
-        column.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        column.setOnEditCommit(event -> {
-            Room room = event.getRowValue();
-            room.setCapacity(event.getNewValue());
-            System.out.println("Updated " + propertyName + ": " + event.getNewValue());
-        });
+    @FXML
+    private void handleDeleteButtonAction() {
+        String[] selectedRoom = tableView.getSelectionModel().getSelectedItem();
+        if (selectedRoom != null) {
+            data.remove(selectedRoom);
+        } else {
+            showAlert("Ошибка", "Пожалуйста, выберите комнату для удаления.");
+        }
     }
 
-    private void setupDoubleColumn(TableColumn<Room, Double> column, String propertyName) {
-        column.setCellValueFactory(new PropertyValueFactory<>(propertyName));
-        column.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        column.setOnEditCommit(event -> {
-            Room room = event.getRowValue();
-            room.setPrice(event.getNewValue());
-            System.out.println("Updated " + propertyName + ": " + event.getNewValue());
-        });
+    // Method to handle row selection and print data to console
+    private void handleRowSelection(MouseEvent event) {
+        if (event.getClickCount() == 2) { // Check for double-click
+            String[] selectedRow = tableView.getSelectionModel().getSelectedItem();
+            if (selectedRow != null) {
+                System.out.println("Selected Room Data:");
+                System.out.println("Номер комнаты: " + selectedRow[0]);
+                System.out.println("Описание: " + selectedRow[1]);
+                System.out.println("Вместимость: " + selectedRow[2]);
+                System.out.println("Стоимость: " + selectedRow[3]);
+                System.out.println("Фото: " + selectedRow[4]);
+            }
+        }
     }
 
-    private void addRoom() {
-        Room newRoom = new Room("New Room", "Description", 10, 100.0,"photo.png");
+    // Method to show an input dialog for room details
+    private String[] showInputDialog(String title, String headerText) {
+        return showInputDialog(title, headerText, null);
+    }
 
-        rooms.add(newRoom);
+    private String[] showInputDialog(String title, String headerText, String[] defaultValues) {
+        Dialog<String[]> dialog = new Dialog<>();
+        dialog.setTitle(title);
+        dialog.setHeaderText(headerText);
 
-        // Установка фокуса на новую строку для ввода данных
-        int newIndex = rooms.size() - 1; // Индекс новой комнаты
-        roomTableView.scrollTo(newIndex); // Прокрутка к новой строке
-        roomTableView.getSelectionModel().select(newIndex); // Выбор новой строки
+        // Create input fields
+        TextField roomNumberField = new TextField(defaultValues != null ? defaultValues[0] : "");
+        TextField descriptionField = new TextField(defaultValues != null ? defaultValues[1] : "");
+        TextField capacityField = new TextField(defaultValues != null ? defaultValues[2] : "");
+        TextField costField = new TextField(defaultValues != null ? defaultValues[3] : "");
+        TextField photoField = new TextField(defaultValues != null ? defaultValues[4] : "");
 
-        roomTableView.edit(newIndex, roomNumberColumn); // Редактирование номера комнаты
+        // Create a grid for layout
+        GridPane grid = new GridPane();
+        grid.add(new Label("Номер комнаты:"), 0, 0);
+        grid.add(roomNumberField, 1, 0);
+        grid.add(new Label("Описание:"), 0, 1);
+        grid.add(descriptionField, 1, 1);
+        grid.add(new Label("Вместимость:"), 0, 2);
+        grid.add(capacityField, 1, 2);
+        grid.add(new Label("Стоимость:"), 0, 3);
+        grid.add(costField, 1, 3);
+        grid.add(new Label("Фото (URL):"), 0, 4);
+        grid.add(photoField, 1, 4);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Add buttons for confirmation and cancellation
+        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+        // Convert the result to an array of strings when the OK button is pressed
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButtonType) {
+                return new String[]{
+                        roomNumberField.getText(),
+                        descriptionField.getText(),
+                        capacityField.getText(),
+                        costField.getText(),
+                        photoField.getText()
+                };
+            }
+            return null;
+        });
+
+        return dialog.showAndWait().orElse(null); // Show dialog and wait for result
+    }
+
+    // Method to show alerts
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

@@ -9,7 +9,7 @@
 
 <?import javafx.scene.image.ImageView?>
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="20" fx:controller="com.example.course_work.MyBookedRoomController"
-      style="-fx-background-color: #39364f; -fx-padding: 20; -fx-pref-width: 300; -fx-max-width: 300; -fx-pref-width: 350; ">
+      style="-fx-background-color: #39364f; -fx-padding: 20; -fx-max-width: 500; -fx-pref-width: 500; ">
 
     <HBox alignment="CENTER" spacing="10"> <!-- HBox для изображения и кнопки -->
         <ImageView fx:id="roomImageView" fitWidth="200" fitHeight="150" preserveRatio="true" />
@@ -17,7 +17,7 @@
             <Label fx:id="titleLabel" style="-fx-font-size: 16px; -fx-text-fill: #FFFFFF;" />
             <Label fx:id="descriptionLabel" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;" />
             <Label fx:id="countLabel" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;" />
-            <Button fx:id="addToCartButton" text="Бронировать" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+            <Button fx:id="addToCartButton" text="Удалить из брони" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
         </VBox>
 
     </HBox>

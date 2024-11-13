@@ -16,11 +16,11 @@
                   <Image url="@images/hotel%20(1).png" />
                </image>
             </ImageView>
-            <Button fx:id="mainButton" mnemonicParsing="false" onAction="#showHomePage" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #9ea5db;" text="Главная" textFill="WHITE">
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </Button>
+<!--            <Button fx:id="mainButton" mnemonicParsing="false" onAction="#showHomePage" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #9ea5db;" text="Главная" textFill="WHITE">-->
+<!--               <VBox.margin>-->
+<!--                  <Insets top="10.0" />-->
+<!--               </VBox.margin>-->
+<!--            </Button>-->
             <Button fx:id="busketButton" mnemonicParsing="false" onAction="#showBusketPage" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #9ea5db;" text="Комнаты" textFill="WHITE">
                <VBox.margin>
                   <Insets top="10.0" />

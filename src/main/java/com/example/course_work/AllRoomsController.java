@@ -2,11 +2,18 @@ package com.example.course_work;
 
 import com.example.course_work.models.Room;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.fxml.FXMLLoader;
+
+import java.awt.*;
 import java.io.IOException;
 import com.example.course_work.database.RoomCrud;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,9 +23,16 @@ import java.util.List;
 public class AllRoomsController {
     @FXML
     private GridPane gridPane;
+    @FXML
+    public Button openFilter;
 
     @FXML
     public void initialize() {
+
+//        openFilter.setOnAction(event -> {
+//            openFilterWindow();
+//        });
+
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
             RoomCrud roomCrud = new RoomCrud(connection);
             List<Room> freeRooms = roomCrud.getFilteredRooms();
@@ -57,6 +71,8 @@ public class AllRoomsController {
             e.printStackTrace();
         }
     }
+
+
 
 
 }
