@@ -80,7 +80,7 @@ public class RoomCartController {
             roomCrud.bookRoom(userId, roomId, checkInDate, checkOutDate);
             System.out.println("выполнено");
             addToCartButton.setText("добавлено в брони");
-            addToCartButton.setStyle("-fx-background-color:#d992a9; -fx-text-fill: white;");
+            addToCartButton.setStyle("-fx-background-color:#9ea5db; -fx-text-fill: white;");
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());

@@ -1,6 +1,7 @@
 package com.example.course_work.database;
 
 import com.example.course_work.SessionManager;
+import com.example.course_work.models.BookedRoom;
 import com.example.course_work.models.Room;
 
 import java.sql.*;
@@ -176,7 +177,7 @@ public class RoomCrud {
     }
 
 
-    public List<Room> getBookedRoomsForUser(int userId) throws SQLException {
+    public List<BookedRoom> getBookedRoomsForUser(int userId) throws SQLException {
         String sql = "SELECT " +
                 "r.RoomID, " +
                 "r.RoomNumber, " +
@@ -185,6 +186,7 @@ public class RoomCrud {
                 "r.RoomCost, " +
                 "r.RoomPhoto, " +
                 "b.CheckInDate, " +
+                "b.bookingDate, "+
                 "b.CheckOutDate, " +
                 "b.BookingStatus " +
                 "FROM Bookings b " +
@@ -192,7 +194,7 @@ public class RoomCrud {
                 "JOIN Rooms r ON br.RoomID = r.RoomID " +
                 "WHERE b.UserID = ?";
 
-        List<Room> bookedRooms = new ArrayList<>();
+        List<BookedRoom> bookedRooms = new ArrayList<>();
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, userId); // Устанавливаем ID пользователя
@@ -207,10 +209,11 @@ public class RoomCrud {
                 double roomCost = rs.getDouble("RoomCost");
                 String roomPhoto = rs.getString("RoomPhoto");
                 LocalDate checkInDate = rs.getDate("CheckInDate").toLocalDate();
+                LocalDate bookingDate = rs.getDate("bookingDate").toLocalDate();
                 LocalDate checkOutDate = rs.getDate("CheckOutDate").toLocalDate();
                 String bookingStatus = rs.getString("BookingStatus");
 
-                Room room = new Room(roomNumber, description, roomCapacity, roomCost,roomPhoto);
+                BookedRoom room = new BookedRoom(roomNumber, description, roomCapacity, roomCost,roomPhoto, checkInDate, checkOutDate, bookingDate);
                 bookedRooms.add(room);
             }
         }
@@ -219,29 +222,53 @@ public class RoomCrud {
         return bookedRooms;
     }
 
-    public void deletedBooked(int userid, LocalDate checkindate, LocalDate checkoutdate) throws SQLException {
-        String sql = "DELETE FROM bookings WHERE userid = ? AND checkindate = ? AND checkoutdate = ?";
+    public void deletedBooked(int userId, LocalDate checkinDate, LocalDate checkoutDate) throws SQLException {
+        String getBookingIdSql = "SELECT BookingID FROM Bookings WHERE UserID = ? AND CheckInDate = ? AND CheckOutDate = ?";
+        String deleteBookingRoomsSql = "DELETE FROM BookingRooms WHERE BookingID = ?";
+        String deleteBookingSql = "DELETE FROM Bookings WHERE BookingID = ?";
 
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006");
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
+            connection.setAutoCommit(false); // Начинаем транзакцию
 
-            // Установка параметров в запрос
-            preparedStatement.setInt(1, userid);
-            preparedStatement.setDate(2, java.sql.Date.valueOf(checkindate));
-            preparedStatement.setDate(3, java.sql.Date.valueOf(checkoutdate));
+            int bookingId = -1; // Идентификатор бронирования
 
-            // Выполнение запроса
-            int rowsAffected = preparedStatement.executeUpdate();
+            // Получаем BookingID
+            try (PreparedStatement preparedStatement = connection.prepareStatement(getBookingIdSql)) {
+                preparedStatement.setInt(1, userId);
+                preparedStatement.setDate(2, java.sql.Date.valueOf(checkinDate));
+                preparedStatement.setDate(3, java.sql.Date.valueOf(checkoutDate));
 
-            if (rowsAffected > 0) {
-                System.out.println("Booking deleted successfully.");
-            } else {
-                System.out.println("No booking found to delete.");
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    bookingId = resultSet.getInt("BookingID");
+                }
             }
+
+            // Если найдено бронирование, удаляем его
+            if (bookingId != -1) {
+                try (PreparedStatement preparedStatement = connection.prepareStatement(deleteBookingRoomsSql)) {
+                    preparedStatement.setInt(1, bookingId);
+                    int rowsAffectedRooms = preparedStatement.executeUpdate();
+                    System.out.println(rowsAffectedRooms + " booking room(s) deleted.");
+                }
+
+                try (PreparedStatement preparedStatement = connection.prepareStatement(deleteBookingSql)) {
+                    preparedStatement.setInt(1, bookingId);
+                    int rowsAffectedBookings = preparedStatement.executeUpdate();
+                    if (rowsAffectedBookings > 0) {
+                        System.out.println("Booking deleted successfully.");
+                    } else {
+                        System.out.println("No booking found to delete.");
+                    }
+                }
+            } else {
+                System.out.println("No booking found for the given criteria.");
+            }
+
+            connection.commit(); // Подтверждаем транзакцию
         } catch (SQLException e) {
-            // Обработка исключений
             e.printStackTrace();
-            throw e; // Можно повторно выбросить исключение или обработать по-другому
+            throw e; // Повторно выбрасываем исключение
         }
     }
 }

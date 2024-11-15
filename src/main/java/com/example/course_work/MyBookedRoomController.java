@@ -21,6 +21,19 @@ public class MyBookedRoomController {
         private Label titleLabel;
 
         @FXML
+        private Label indate;
+
+
+        @FXML
+        private Label outdate;
+
+
+        @FXML
+        private Label bookingdateLabel;
+
+
+
+        @FXML
         private Label daysCountLabel;
 
         @FXML
@@ -39,15 +52,26 @@ public class MyBookedRoomController {
 
         private String roomTitle;
 
+        private LocalDate roomin;
+        private LocalDate roomout;
+        private LocalDate roombookingdate;
 
 
-        public void setRoomData( String title, String description, String count, String imagePath) {
+
+        public void setRoomData( String title, String description, String count, String imagePath, LocalDate in, LocalDate out, LocalDate bookingdate) {
 
 
             this.roomTitle = title;
+            this.roomin = in;
+            this.roomout = out;
+            this.roombookingdate = bookingdate;
             titleLabel.setText(title);
             descriptionLabel.setText(description);
             countLabel.setText(count);
+            indate.setText(String.valueOf(in));
+
+            outdate.setText(String.valueOf(out));
+            bookingdateLabel.setText(String.valueOf(bookingdate));
 
             setRoomImage(imagePath);
 
@@ -62,7 +86,7 @@ public class MyBookedRoomController {
 
         private void deleteBooked() throws SQLException {
             int userId = SessionManager.getInstance().getId();
-            System.out.println("Добавлено в корзину: " + roomTitle + ", пользователь ID: " + userId + ", количество дней: " + daysCount);
+            System.out.println("Добавлено в корзину: " + roomTitle + ", пользователь ID: " + userId + ", количество дней: " + daysCount + "in " +roomin + "out: " + roomout);
 
 
             if (userId <= 0) {
@@ -71,7 +95,7 @@ public class MyBookedRoomController {
             }
             try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
                 RoomCrud roomCrud = new RoomCrud(connection);
-//                roomCrud.deletedBooked(userId, );
+                roomCrud.deletedBooked(userId, roomin, roomout);
                 addToCartButton.setText("удалено");
                 addToCartButton.setStyle("-fx-background-color:#d992a9; -fx-text-fill: white;");
 

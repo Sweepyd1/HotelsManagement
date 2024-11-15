@@ -1,4 +1,5 @@
 package com.example.course_work;
+import com.example.course_work.models.BookedRoom;
 import com.example.course_work.models.Room;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
@@ -21,11 +22,11 @@ public class MyBookedRooms {
         public void initialize() {
             try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
                 RoomCrud roomCrud = new RoomCrud(connection);
-                List<Room> freeRooms = roomCrud.getBookedRoomsForUser(SessionManager.getInstance().getId());
+                List<BookedRoom> freeRooms = roomCrud.getBookedRoomsForUser(SessionManager.getInstance().getId());
 
                 if (freeRooms != null && !freeRooms.isEmpty()) {
                     for (int i = 0; i < freeRooms.size(); i++) {
-                        Room room = freeRooms.get(i);
+                        BookedRoom room = freeRooms.get(i);
                         try {
 
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("bookedroom_management.fxml")); // Укажите правильный путь к вашему FXML
@@ -33,7 +34,7 @@ public class MyBookedRooms {
 
                             MyBookedRoomController myBookedRooms = loader.getController();
                             String imagePath = "hotel (1).png";
-                            myBookedRooms.setRoomData(room.getRoomNumber(), room.getDescription(), "Количество: " + room.getCapacity(), imagePath); // Используем данные из базы
+                            myBookedRooms.setRoomData(room.getRoomNumber(), room.getDescription(), "Количество: " + room.getCapacity(), imagePath, room.getIndate(), room.getOutdate(), room.getBookingdate()); // Используем данные из базы
 
                             int column = i % 3;
                             int row = i / 3;
