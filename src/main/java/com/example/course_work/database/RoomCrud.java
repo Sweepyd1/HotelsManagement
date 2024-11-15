@@ -218,6 +218,32 @@ public class RoomCrud {
 
         return bookedRooms;
     }
+
+    public void deletedBooked(int userid, LocalDate checkindate, LocalDate checkoutdate) throws SQLException {
+        String sql = "DELETE FROM bookings WHERE userid = ? AND checkindate = ? AND checkoutdate = ?";
+
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006");
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            // Установка параметров в запрос
+            preparedStatement.setInt(1, userid);
+            preparedStatement.setDate(2, java.sql.Date.valueOf(checkindate));
+            preparedStatement.setDate(3, java.sql.Date.valueOf(checkoutdate));
+
+            // Выполнение запроса
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Booking deleted successfully.");
+            } else {
+                System.out.println("No booking found to delete.");
+            }
+        } catch (SQLException e) {
+            // Обработка исключений
+            e.printStackTrace();
+            throw e; // Можно повторно выбросить исключение или обработать по-другому
+        }
+    }
 }
 
 

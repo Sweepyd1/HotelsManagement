@@ -60,8 +60,6 @@ public class MyBookedRoomController {
             });
         }
 
-
-
         private void deleteBooked() throws SQLException {
             int userId = SessionManager.getInstance().getId();
             System.out.println("Добавлено в корзину: " + roomTitle + ", пользователь ID: " + userId + ", количество дней: " + daysCount);
@@ -73,17 +71,17 @@ public class MyBookedRoomController {
             }
             try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
                 RoomCrud roomCrud = new RoomCrud(connection);
-//
+//                roomCrud.deletedBooked(userId, );
+                addToCartButton.setText("удалено");
+                addToCartButton.setStyle("-fx-background-color:#d992a9; -fx-text-fill: white;");
 
                 } catch (SQLException e) {
-                    System.out.println(e.getMessage()); // Выводим сообщение об ошибке
+                    System.out.println(e.getMessage());
                 }
             }
 
     private void setRoomImage(String imagePath) {
-        // Предполагаем, что imagePath это относительный путь к изображению
         try {
-            // Загружаем изображение из ресурсов
             Image image = new Image(getClass().getResourceAsStream("/images/" + imagePath));
             roomImageView.setImage(image);
         } catch (Exception e) {
@@ -91,8 +89,8 @@ public class MyBookedRoomController {
             System.out.println("Ошибка загрузки изображения: " + e.getMessage());
         }
     }
-            // Здесь можно добавить логику для добавления в корзину ну можно не удалять можно просто перенапрвлять потом на страницу с бронями и в бд просто менять на booked
-        }
+
+}
 
 
 

@@ -23,7 +23,6 @@ public class MyBookedRooms {
                 RoomCrud roomCrud = new RoomCrud(connection);
                 List<Room> freeRooms = roomCrud.getBookedRoomsForUser(SessionManager.getInstance().getId());
 
-
                 if (freeRooms != null && !freeRooms.isEmpty()) {
                     for (int i = 0; i < freeRooms.size(); i++) {
                         Room room = freeRooms.get(i);
@@ -32,20 +31,15 @@ public class MyBookedRooms {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("bookedroom_management.fxml")); // Укажите правильный путь к вашему FXML
                             VBox roomVBox = loader.load();
 
-
                             MyBookedRoomController myBookedRooms = loader.getController();
                             String imagePath = "hotel (1).png";
                             myBookedRooms.setRoomData(room.getRoomNumber(), room.getDescription(), "Количество: " + room.getCapacity(), imagePath); // Используем данные из базы
 
-
                             int column = i % 3;
                             int row = i / 3;
 
-
-                            GridPane.setMargin(roomVBox, new javafx.geometry.Insets(40)); // Устанавливаем отступы вокруг VBox
-
-                            // Добавление VBox в GridPane
-                            gridPane.add(roomVBox, column, row); // Добавляем по колонкам и строкам
+                            GridPane.setMargin(roomVBox, new javafx.geometry.Insets(40));
+                            gridPane.add(roomVBox, column, row);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

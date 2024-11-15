@@ -12,7 +12,7 @@
             <content>
                 <GridPane fx:id="gridPane"  style="-fx-background-color: #28293c;">
                     <rowConstraints>
-                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints  />
                     </rowConstraints>
                 </GridPane>
             </content>

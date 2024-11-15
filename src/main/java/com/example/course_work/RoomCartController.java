@@ -1,6 +1,7 @@
 package com.example.course_work;
 
 import com.example.course_work.database.RoomCrud;
+//import com.example.course_work.models.BookedRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -63,52 +64,36 @@ public class RoomCartController {
         int userId = SessionManager.getInstance().getId();
         System.out.println("Добавлено в корзину: " + roomTitle + ", пользователь ID: " + userId + ", количество дней: " + daysCount);
 
-
         if (userId <= 0) {
             System.out.println("Пользователь не авторизован.");
             return;
         }
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
             RoomCrud roomCrud = new RoomCrud(connection);
-//
+
         int roomId = roomCrud.getSelectedRoomIdByTitle(roomTitle);
         LocalDate checkInDate = SessionManager.getInstance().getInDate();
         LocalDate checkOutDate = SessionManager.getInstance().getOutDate();
-//
+//        BookedRoom bookedRoom = new BookedRoom(checkInDate, checkOutDate);
 
-//
         try {
             roomCrud.bookRoom(userId, roomId, checkInDate, checkOutDate);
-
-            // Удаление карточки из интерфейса после успешного бронирования
             System.out.println("выполнено");
+            addToCartButton.setText("добавлено в брони");
+            addToCartButton.setStyle("-fx-background-color:#d992a9; -fx-text-fill: white;");
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage()); // Выводим сообщение об ошибке
+            System.out.println(e.getMessage());
         }
-    }
-        // Здесь можно добавить логику для добавления в корзину ну можно не удалять можно просто перенапрвлять потом на страницу с бронями и в бд просто менять на booked
     }
 
-        public void increaseDaysCount() {
-        if (daysCount<10){
-            daysCount++;
-            daysCountLabel.setText(String.valueOf(daysCount));
-        }
-        // Обновляем отображение количества дней
     }
 
-    public void decreaseDaysCount() {
-        if (daysCount > 1) { // Не позволяем уменьшать ниже 1
-            daysCount--;
-            daysCountLabel.setText(String.valueOf(daysCount)); // Обновляем отображение количества дней
-        }
-    }
+
 
     private void setRoomImage(String imagePath) {
-        // Предполагаем, что imagePath это относительный путь к изображению
+
         try {
-            // Загружаем изображение из ресурсов
             Image image = new Image(getClass().getResourceAsStream("/images/" + imagePath));
             roomImageView.setImage(image);
         } catch (Exception e) {

@@ -13,7 +13,7 @@
          <content>
             <GridPane fx:id="gridPane" maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: #28293c;" hgap="10" vgap="10"> <!-- Установлены отступы между карточками -->
                <rowConstraints>
-                  <RowConstraints vgrow="SOMETIMES"/>
+                  <RowConstraints />
                </rowConstraints>
             </GridPane>
          </content>
