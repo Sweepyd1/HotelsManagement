@@ -17,6 +17,10 @@ import java.time.LocalDate;
 public class ChangeWindowController {
 
     public Button myBookingRooms;
+
+
+    @FXML
+    public Button bookings;
     @FXML
     private AnchorPane mainContent;
     @FXML
@@ -28,6 +32,20 @@ public class ChangeWindowController {
     @FXML
     private Text PageTitle;
 
+
+    @FXML
+    public void initialize() {
+        // Проверяем роль пользователя и отображаем кнопку в зависимости от роли
+        if ("admin".equals(SessionManager.getInstance().getUserRole())) {
+            adminButton.setVisible(true); // Показываем кнопку для админа
+            bookings.setVisible(true);
+
+        } else {
+            adminButton.setVisible(false); // Скрываем кнопку для других ролей
+            bookings.setVisible(false);
+
+        }
+    }
 
     @FXML
     public void showHomePage() {
@@ -73,7 +91,7 @@ public class ChangeWindowController {
 
     @FXML
     public void showAdminRoomsPage() {
-        loadPage("admin_rooms.fxml", "комнаты");
+        loadPage("admin/admin_rooms.fxml", "комнаты");
 //        highlightButton(adminButton);
     }
 
@@ -103,23 +121,30 @@ public class ChangeWindowController {
 
     public boolean openFilterWindow() {
         try {
-            // Load the new FXML file
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("mainPage.fxml"));
             Parent root = loader.load();
 
             // Create a new Stage (window)
             Stage filterStage = new Stage();
+
             filterStage.setTitle("Фильтры");
             filterStage.initModality(Modality.APPLICATION_MODAL);
-            filterStage.setScene(new Scene(root));
 
-            // Show the stage and wait for it to be closed
-            filterStage.showAndWait(); // This will block until the window is closed
+            // Set the scene with an appropriate size
+            Scene scene = new Scene(root);
+            filterStage.setScene(scene);
 
-            return true; // Indicate that the window was opened and closed
+            filterStage.setMinWidth(300);
+//            filterStage.setMinHeight(400);
+            filterStage.setMaxHeight(480);
+
+            filterStage.showAndWait();
+            return true;
         } catch (Exception e) {
             e.printStackTrace(); // Handle exceptions appropriately
             return false; // Indicate that there was an error
         }
     }
+
 }

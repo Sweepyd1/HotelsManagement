@@ -66,9 +66,13 @@ public class LoginController {
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
             UserCrud userCrud = new UserCrud(connection);
             boolean isExist = userCrud.userExists(login, password);
+
             if (isExist){
                 try {
                     SessionManager.getInstance().setId(userCrud.getUserId(login, password));
+                    SessionManager.getInstance().setUserRole(userCrud.getUserRole(login, password));
+                    String role =  SessionManager.getInstance().getUserRole();
+                    System.out.println(role);
 
 
                     switchToMain();

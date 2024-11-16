@@ -16,7 +16,7 @@
                 <Button onAction="#handleDeleteButtonAction" prefWidth="600.0" text="удалить" style="-fx-background-color: #9ea5db; -fx-text-fill: white;" />
             </children>
         </HBox>
-        <TableView fx:id="tableView" layoutX="43.0" layoutY="26.0" prefHeight="374.0" prefWidth="600.0" style="-fx-background-color: #28293c;" stylesheets="@styles/table.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0" >
+        <TableView fx:id="tableView" layoutX="43.0" layoutY="26.0" prefHeight="374.0" prefWidth="600.0" style="-fx-background-color: #28293c;" stylesheets="@../styles/table.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0" >
             <columns>
                 <TableColumn fx:id="roomNumberColumn" text="Номер комнаты" />
                 <TableColumn fx:id="descriptionColumn" text="Описание комнаты" />

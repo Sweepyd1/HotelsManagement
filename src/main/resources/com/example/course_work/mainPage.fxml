@@ -7,39 +7,60 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="200" prefWidth="400" style="-fx-background-color:  #28293c; -fx-padding: 10;" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.course_work.SessionManager">
-    <VBox fx:id="filtersContainer" spacing="15" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="0.0">
+<AnchorPane prefWidth="300" maxHeight="150" style="-fx-background-color:  #28293c; -fx-padding: 10;" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.course_work.SessionManager">
+    <VBox spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+
+<!--        <HBox>-->
+<!--            <Button fx:id="cancelButton" text="закрыть" style="-fx-background-color: #d992a9;" textFill="white"/>-->
+<!--        </HBox>-->
 
         <Label text="Выберите даты" textFill="white" />
-        <Label text="Дата заезда" textFill="white" />
-        <DatePicker fx:id="checkInDatePicker" />
 
-        <Label text="Дата выезда" textFill="white" />
-        <DatePicker fx:id="checkOutDatePicker" style="-fx-background-color: #9ea5db;" />
+        <HBox spacing="10">
+            <VBox spacing="5">
+                <Label text="Дата заезда" textFill="white" />
+                <DatePicker fx:id="checkInDatePicker" />
+            </VBox>
+            <VBox spacing="5">
+                <Label text="Дата выезда" textFill="white" />
+                <DatePicker fx:id="checkOutDatePicker" />
+            </VBox>
+        </HBox>
 
         <Label text="Цена (руб.)" textFill="white" />
-        <Label text="Минимальная цена" textFill="white" />
-        <Slider fx:id="minPriceSlider" max="10000" min="0" prefHeight="40.0" prefWidth="250.0" showTickLabels="true" showTickMarks="true" style="-fx-background-color: #9ea5db;" value="1000.0">
-            <majorTickUnit>1000</majorTickUnit>
-            <minorTickCount>4</minorTickCount>
-        </Slider>
 
-        <Label text="Максимальная цена" textFill="white" />
-        <Slider fx:id="maxPriceSlider" max="10000" min="0" prefHeight="40.0" prefWidth="382.0" showTickLabels="true" showTickMarks="true" style="-fx-background-color: #9ea5db;" value="5000">
-            <majorTickUnit>1000</majorTickUnit>
-            <minorTickCount>4</minorTickCount>
-        </Slider>
+        <HBox spacing="10">
+            <VBox spacing="5">
+                <Label text="Минимальная цена" textFill="white" />
+                <Slider fx:id="minPriceSlider" max="10000" min="0" prefHeight="30.0" showTickLabels="true" showTickMarks="true" style="-fx-background-color: #9ea5db;" value="1000.0">
+                    <majorTickUnit>1000</majorTickUnit>
+                    <minorTickCount>4</minorTickCount>
+                </Slider>
+            </VBox>
+            <VBox spacing="5">
+                <Label text="Максимальная цена" textFill="white" />
+                <Slider fx:id="maxPriceSlider" max="10000" min="0" prefHeight="30.0" showTickLabels="true" showTickMarks="true" style="-fx-background-color: #9ea5db;" value="5000">
+                    <majorTickUnit>1000</majorTickUnit>
+                    <minorTickCount>4</minorTickCount>
+                </Slider>
+            </VBox>
+        </HBox>
 
-        <Label text="Количество мест:" textFill="white"/>
-        <Spinner fx:id="capacitySpinner" max="10" min="1" />
+        <HBox spacing="10">
+            <Label text="Количество мест:" textFill="white"/>
+            <Spinner fx:id="capacitySpinner" max="10" min="1" />
+        </HBox>
 
         <Label text="Удобства" textFill="white"/>
-        <CheckBox fx:id="wifiCheckBox" style="-fx-background-color: #9ea5db;" text="Wi-Fi" textFill="white"/>
-        <CheckBox fx:id="breakfastCheckBox" style="-fx-background-color: #9ea5db;" text="Завтрак включен" textFill="white"/>
-        <CheckBox fx:id="spaCheckBox" style="-fx-background-color: #9ea5db;" text="Спа-процедуры" textFill="white"/>
-        <CheckBox fx:id="petFriendlyCheckBox" style="-fx-background-color: #9ea5db;" text="Допускаются домашние животные" textFill="white"/>
+        <VBox spacing="5">
+            <CheckBox fx:id="wifiCheckBox" style="-fx-background-color: #9ea5db;" text="Wi-Fi" textFill="white"/>
+            <CheckBox fx:id="breakfastCheckBox" style="-fx-background-color: #9ea5db;" text="Завтрак включен" textFill="white"/>
+            <CheckBox fx:id="spaCheckBox" style="-fx-background-color: #9ea5db;" text="Спа-процедуры" textFill="white"/>
+            <CheckBox fx:id="petFriendlyCheckBox" style="-fx-background-color: #9ea5db;" text="Допускаются домашние животные" textFill="white"/>
+        </VBox>
 
         <Button style="-fx-background-color: #9ea5db;" text="Применить фильтры" textFill="WHITE" onAction="#applyFilters"/>
     </VBox>

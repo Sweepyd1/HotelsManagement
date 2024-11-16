@@ -1,0 +1,13 @@
+.custom-alert {
+    -fx-background-color:red; /* Цвет фона */
+    -fx-font-size: 14px; /* Размер шрифта */
+}
+
+.custom-alert .label {
+    -fx-text-fill: #333; /* Цвет текста */
+}
+
+.custom-alert .button {
+    -fx-background-color: #007bff; /* Цвет кнопки */
+    -fx-text-fill: white; /* Цвет текста на кнопке */
+}

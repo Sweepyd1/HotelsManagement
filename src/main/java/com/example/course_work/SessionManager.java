@@ -1,17 +1,20 @@
 package com.example.course_work;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+
 
 import java.time.LocalDate;
+import com.example.course_work.ChangeWindowController;
+
+
 public class SessionManager {
 
     public static SessionManager instance;
 
     public int userId;
+    public String userRole;
 
     public LocalDate checkInDate;
     public LocalDate checkOutDate;
@@ -50,6 +53,7 @@ public class SessionManager {
 
     @FXML
     public CheckBox petFriendlyCheckBox;
+
 
     @FXML
     private Spinner<Integer> capacitySpinner;
@@ -149,6 +153,13 @@ public class SessionManager {
         return this.capacity;
     }
 
+    public void setUserRole(String role){
+        this.userRole = role;
+    }
+    public String getUserRole(){
+        return this.userRole;
+    }
+
 
     @FXML
     public void applyFilters() {
@@ -174,6 +185,9 @@ public class SessionManager {
         sessionManager.setSpa(spa);
         sessionManager.setPetFriendly(petFriendly);
         sessionManager.setCapacity(selectedCapacity);
+
+
+
 
         // Логика применения фильтров...
         System.out.println("Выбрано количество мест: " + selectedCapacity);

@@ -84,7 +84,6 @@ public class AdminRoomsController {
         }
     }
 
-    // Method to handle row selection and print data to console
     private void handleRowSelection(MouseEvent event) {
         if (event.getClickCount() == 2) { // Check for double-click
             String[] selectedRow = tableView.getSelectionModel().getSelectedItem();
@@ -111,7 +110,9 @@ public class AdminRoomsController {
 
         // Create input fields
         TextField roomNumberField = new TextField(defaultValues != null ? defaultValues[0] : "");
-        TextField descriptionField = new TextField(defaultValues != null ? defaultValues[1] : "");
+        TextArea descriptionField = new TextArea(defaultValues != null ? defaultValues[1] : "");
+        descriptionField.setWrapText(true);
+
         TextField capacityField = new TextField(defaultValues != null ? defaultValues[2] : "");
         TextField costField = new TextField(defaultValues != null ? defaultValues[3] : "");
         TextField photoField = new TextField(defaultValues != null ? defaultValues[4] : "");
@@ -152,9 +153,22 @@ public class AdminRoomsController {
         return dialog.showAndWait().orElse(null); // Show dialog and wait for result
     }
 
+
+
+
+
+
+
+
     // Method to show alerts
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+//        alert.getDialogPane().getStyleClass().add("custom-alert");
+//
+//        // Загружаем CSS файл
+//        alert.getDialogPane().getStylesheets().add(getClass().getResource("/styles/alert.css").toExternalForm());
+
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

@@ -36,7 +36,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="adminButton1" mnemonicParsing="false" onAction="#showAdminBookingsPage" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #626FCD;" text="Брони" textFill="WHITE">
+            <Button fx:id="bookings" mnemonicParsing="false" onAction="#showAdminBookingsPage" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #626FCD;" text="Брони" textFill="WHITE">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>

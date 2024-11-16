@@ -99,4 +99,19 @@ public class UserCrud {
         }
         return null; // Если пользователь не найден, возвращаем null
     }
+
+
+    public String getUserRole(String username, String password) throws SQLException {
+        String sql = "SELECT userrole FROM users WHERE userlogin = ? AND userpassword = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("userrole"); // Возвращаем ID пользователя
+            }
+        }
+        return null; // Если пользователь не найден, возвращаем null
+    }
+
 }

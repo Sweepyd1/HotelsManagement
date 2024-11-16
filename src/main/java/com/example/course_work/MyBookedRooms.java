@@ -33,7 +33,7 @@ public class MyBookedRooms {
                             VBox roomVBox = loader.load();
 
                             MyBookedRoomController myBookedRooms = loader.getController();
-                            String imagePath = "hotel (1).png";
+                            String imagePath = room.getPhoto();
                             myBookedRooms.setRoomData(room.getRoomNumber(), room.getDescription(), "Количество: " + room.getCapacity(), imagePath, room.getIndate(), room.getOutdate(), room.getBookingdate()); // Используем данные из базы
 
                             int column = i % 3;

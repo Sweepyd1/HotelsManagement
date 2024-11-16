@@ -13,10 +13,6 @@ import java.time.LocalDate;
 
 public class MyBookedRoomController {
 
-
-
-
-
         @FXML
         private Label titleLabel;
 
@@ -27,11 +23,8 @@ public class MyBookedRoomController {
         @FXML
         private Label outdate;
 
-
         @FXML
         private Label bookingdateLabel;
-
-
 
         @FXML
         private Label daysCountLabel;
