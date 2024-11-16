@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -103,4 +104,7 @@ public class RoomCartController {
     }
 
 
+    public void getRoomInfo(MouseEvent mouseEvent) {
+        System.out.println(this.roomTitle);
+    }
 }

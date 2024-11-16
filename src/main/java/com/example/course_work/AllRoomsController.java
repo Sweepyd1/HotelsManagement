@@ -49,7 +49,7 @@ public class AllRoomsController {
                         // Получение контроллера для комнаты
                         RoomCartController roomController = loader.getController();
                         String imagePath = room.getPhoto();
-                        System.out.println(imagePath);
+
                         roomController.setRoomData(room.getRoomNumber(), room.getDescription(), "Количество: " + room.getCapacity(), imagePath); // Используем данные из базы
 
                         // Определяем позицию в GridPane

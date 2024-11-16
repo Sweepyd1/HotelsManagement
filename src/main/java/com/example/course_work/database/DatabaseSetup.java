@@ -76,7 +76,7 @@ public class DatabaseSetup {
                     "RoomNumber TEXT UNIQUE NOT NULL," +
                     "RoomDescription TEXT NOT NULL," +
                     "RoomCapacity INT NOT NULL," +
-                    "RoomCost DECIMAL(19, 4) NOT NULL," +
+                    "RoomCost INT NOT NULL," +
                     "RoomPhoto TEXT," +
                     "ServiceID INT REFERENCES Services(ServiceID)" + // Добавляем колонку ServiceID
                     ")";
@@ -117,11 +117,11 @@ public class DatabaseSetup {
 
                     roomPstmt.setString(1, String.valueOf(100 + i)); // Номер комнаты
                     roomPstmt.setString(2, "Описание номера #" + i); // Описание номера
-                    roomPstmt.setInt(3, 2); // Вместимость
-                    roomPstmt.setBigDecimal(4, new BigDecimal("3000.00")); // Стоимость
-                // Статус (через каждые две комнаты меняем статус)
+                    roomPstmt.setInt(3, 2);
+                    roomPstmt.setInt(4, 3000);
 
-                    roomPstmt.setString(5, null); // Фото (можно указать путь к фото или оставить null)
+
+                    roomPstmt.setString(5, "1.png"); // Фото (можно указать путь к фото или оставить null)
 
                     // Случайный выбор услуги из таблицы Services
                     int randomServiceId = (int) (Math.random() * 4) + 1; // Предполагая, что у вас 4 услуги с ID от 1 до 4

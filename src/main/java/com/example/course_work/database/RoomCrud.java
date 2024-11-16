@@ -96,10 +96,11 @@ public class RoomCrud {
                 String roomNumber = rs.getString("RoomNumber");
                 String description = rs.getString("RoomDescription");
                 int roomCapacity = rs.getInt("RoomCapacity");
-                double price = rs.getDouble("RoomCost");
+                int price = rs.getInt("RoomCost");
                 String photo = rs.getString("RoomPhoto");
+                int serviceId = rs.getInt("serviceid");
 
-                Room room = new Room(roomNumber, description, roomCapacity, price, photo);
+                Room room = new Room(roomNumber, description, roomCapacity, price, photo, serviceId);
                 filteredRooms.add(room);
             }
         }
@@ -186,7 +187,7 @@ public class RoomCrud {
                 "r.RoomCost, " +
                 "r.RoomPhoto, " +
                 "b.CheckInDate, " +
-                "b.bookingDate, "+
+                "b.bookingDate, " +
                 "b.CheckOutDate, " +
                 "b.BookingStatus " +
                 "FROM Bookings b " +
@@ -213,11 +214,11 @@ public class RoomCrud {
                 LocalDate checkOutDate = rs.getDate("CheckOutDate").toLocalDate();
                 String bookingStatus = rs.getString("BookingStatus");
 
-                BookedRoom room = new BookedRoom(roomNumber, description, roomCapacity, roomCost,roomPhoto, checkInDate, checkOutDate, bookingDate);
+                BookedRoom room = new BookedRoom(roomNumber, description, roomCapacity, roomCost, roomPhoto, checkInDate, checkOutDate, bookingDate);
                 bookedRooms.add(room);
             }
         }
-        System.out.println("booked rooms: "+ bookedRooms);
+        System.out.println("booked rooms: " + bookedRooms);
 
         return bookedRooms;
     }
@@ -271,6 +272,113 @@ public class RoomCrud {
             throw e; // Повторно выбрасываем исключение
         }
     }
+
+
+    public void addNewRoom(String name, String description, int capacity, int cost, String photo, int serviceId) {
+        String insertRoomSQL =
+                "INSERT INTO Rooms (RoomNumber, RoomDescription, RoomCapacity, RoomCost,RoomPhoto, ServiceID) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement roomPstmt = connection.prepareStatement(insertRoomSQL)) {
+
+            roomPstmt.setString(1, name);
+            roomPstmt.setString(2, description);
+            roomPstmt.setInt(3, capacity);
+            roomPstmt.setInt(4, cost);
+            roomPstmt.setString(5, photo);
+            roomPstmt.setInt(6, serviceId);
+
+            roomPstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public void updateRoomData(String name, String description, int capacity, int cost, String photo, int serviceId, String oldName) {
+        int roomId; // Variable to hold the found room ID
+
+        // First, find the Room ID based on RoomNumber
+        System.out.println("old name: " + oldName);
+        String selectRoomSQL = "SELECT RoomID FROM Rooms WHERE RoomNumber = ?";
+
+        try (PreparedStatement selectStmt = connection.prepareStatement(selectRoomSQL)) {
+            selectStmt.setString(1, oldName); // Assuming 'name' is actually the RoomNumber
+
+            ResultSet resultSet = selectStmt.executeQuery();
+            if (resultSet.next()) {
+                roomId = resultSet.getInt("RoomID"); // Get the RoomID
+            } else {
+                System.out.println("No room found with the specified RoomNumber.");
+                return; // Exit if no room is found
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving room ID: " + e.getMessage(), e);
+        }
+
+        // Now update the room using the found RoomID
+        String updateRoomSQL = "UPDATE Rooms SET roomNumber = ?, RoomDescription = ?, RoomCapacity = ?, RoomCost = ?, RoomPhoto = ?, ServiceID = ? WHERE RoomID = ?";
+
+        try (PreparedStatement updateStmt = connection.prepareStatement(updateRoomSQL)) {
+            updateStmt.setString(1, name);
+            updateStmt.setString(2, description);
+            updateStmt.setInt(3, capacity);
+            updateStmt.setInt(4, cost);
+            updateStmt.setString(5, photo);
+            updateStmt.setInt(6, serviceId);
+            updateStmt.setInt(7, roomId);
+
+            int affectedRows = updateStmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Room updated successfully.");
+            } else {
+                System.out.println("No changes were made to the room.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating room data: " + e.getMessage(), e);
+        }
+    }
+
+
+    public void deleteRoom(String roomNumber) {
+        String insertRoomSQL =
+                "DELETE from Rooms WHERE roomNumber = ?";
+        try (PreparedStatement roomPstmt = connection.prepareStatement(insertRoomSQL)) {
+
+            roomPstmt.setString(1, roomNumber);
+            roomPstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public List<Room> getAllRoomData() {
+        String selectRoomSQL = "SELECT * FROM Rooms";
+        List<Room> rooms = new ArrayList<>();
+
+        try (PreparedStatement roomPstmt = connection.prepareStatement(selectRoomSQL);
+             ResultSet resultSet = roomPstmt.executeQuery()) { // Use executeQuery for SELECT
+
+            while (resultSet.next()) {
+                // Assuming Room class has a constructor that matches your table structure
+                Room room = new Room(
+
+                        resultSet.getString("RoomNumber"),
+                        resultSet.getString("RoomDescription"),
+                        resultSet.getInt("RoomCapacity"),
+                        resultSet.getInt("RoomCost"),
+                        resultSet.getString("RoomPhoto"),
+                        resultSet.getInt("ServiceID")
+                );
+                rooms.add(room);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving room data: " + e.getMessage(), e);
+        }
+
+        return rooms; // Return the list of rooms
+    }
+
 }
 
 

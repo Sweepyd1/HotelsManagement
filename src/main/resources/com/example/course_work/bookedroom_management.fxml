@@ -9,20 +9,33 @@
 
 <?import javafx.scene.image.ImageView?>
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="20" fx:controller="com.example.course_work.MyBookedRoomController"
-      style="-fx-background-color: #39364f; -fx-padding: 20; -fx-max-width: 500; -fx-pref-width: 500;  -fx-border-radius: 10px; -fx-background-radius:10px;">
+      style="-fx-background-color: #39364f; -fx-padding: 20; -fx-max-width: 500; -fx-pref-width: 500;  -fx-border-radius: 10px; -fx-background-radius:10px;" alignment="CENTER">
 
-    <HBox alignment="CENTER" spacing="10"> <!-- HBox для изображения и кнопки -->
-        <ImageView fx:id="roomImageView" fitWidth="200" fitHeight="150" preserveRatio="true" />
-        <VBox spacing="10"> <!-- VBox для описания -->
-            <Label fx:id="titleLabel" style="-fx-font-size: 16px; -fx-text-fill: #FFFFFF;" />
-            <Label fx:id="descriptionLabel" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;" />
-            <Label fx:id="countLabel" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;" />
-            <Label fx:id="indate" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;" />
-            <Label fx:id="outdate" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;" />
-            <Label fx:id="bookingdateLabel" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;" />
-<!--            <Label fx:id="countLabel" style="-fx-font-size: 14px; -fx-text-fill: #FFFFFF;" />-->
-            <Button fx:id="addToCartButton" text="Удалить из брони" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+
+        <ImageView fx:id="roomImageView" fitWidth="300" fitHeight="550" preserveRatio="true" />
+        <VBox spacing="10">
+
+            <Label style="-fx-font-size: 18px; -fx-text-fill: #FFFFFF;" text="Номер комнаты" wrapText="true"/>
+            <Label fx:id="titleLabel" style="-fx-font-size: 16px; -fx-text-fill: #808080;" />
+
+            <Label style="-fx-font-size: 18px; -fx-text-fill: #FFFFFF;" text="Описание" wrapText="true"/>
+            <Label fx:id="descriptionLabel" style="-fx-font-size: 16px; -fx-text-fill: #808080;" />
+
+            <Label style="-fx-font-size: 18px; -fx-text-fill: #FFFFFF;" text="Количество мест" wrapText="true"/>
+            <Label fx:id="countLabel" style="-fx-font-size: 16px; -fx-text-fill: #808080;" />
+
+            <Label style="-fx-font-size: 18px; -fx-text-fill: #FFFFFF;" text="Дата заселения" wrapText="true"/>
+            <Label fx:id="indate" style="-fx-font-size: 16px; -fx-text-fill: #808080;" />
+
+            <Label style="-fx-font-size: 18px; -fx-text-fill: #FFFFFF;" text="Дата выселения" wrapText="true"/>
+            <Label fx:id="outdate" style="-fx-font-size: 16px; -fx-text-fill: #808080;" />
+
+            <Label style="-fx-font-size: 18px; -fx-text-fill: #FFFFFF;" text="Дата бронирования" wrapText="true"/>
+            <Label fx:id="bookingdateLabel" style="-fx-font-size: 16px; -fx-text-fill: #808080;" />
+
+
+            <Button fx:id="addToCartButton" prefHeight="35.0" prefWidth="430.0" text="Удалить из брони" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
         </VBox>
 
-    </HBox>
+
 </VBox>

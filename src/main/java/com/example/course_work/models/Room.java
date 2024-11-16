@@ -9,16 +9,18 @@ public class Room {
     private String roomNumber;
     private String description;
     private int capacity;
-    private double price;
+    private int price;
 
     private String photo;
+    private int serviceId;
 
-    public Room(String roomNumber, String description, int capacity, double price, String photo) {
+    public Room(String roomNumber, String description, int capacity, int price, String photo, int serviceId) {
         this.roomNumber = roomNumber;
         this.description = description;
         this.capacity = capacity;
         this.price = price;
         this.photo = photo;
+        this.serviceId = serviceId;
     }
 
     // Геттер для номера комнаты
@@ -52,14 +54,17 @@ public class Room {
     }
 
     // Геттер для цены
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
     // Сеттер для цены
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
+
+
+
 
     // Геттер для статуса
 
@@ -67,6 +72,15 @@ public class Room {
     // Геттер для фото
     public String getPhoto() {
         return photo;
+    }
+
+
+    public void setServiceId(int service) {
+        this.serviceId = service;
+    }
+
+    public int getServiceId() {
+        return serviceId;
     }
 
     // Сеттер для фото
@@ -81,6 +95,7 @@ public class Room {
                 ", capacity=" + capacity +
                 ", price=" + price +
                 ", photo='" + photo + '\'' +
+                ", serviceId'" + serviceId + '\''+
                 '}';
     }
 }
