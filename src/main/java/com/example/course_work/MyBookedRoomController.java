@@ -1,6 +1,7 @@
 package com.example.course_work;
 import com.example.course_work.database.RoomCrud;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -94,6 +95,14 @@ public class MyBookedRoomController {
 
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Ошибка");
+                    alert.setHeaderText(null); // Убираем заголовок
+                    alert.setContentText("Извините, нельзя отказаться от бронирования меньше чем за сутки до заезда"); // Текст сообщения
+
+                        // Отображение окна
+                    alert.showAndWait();
+
                 }
             }
 

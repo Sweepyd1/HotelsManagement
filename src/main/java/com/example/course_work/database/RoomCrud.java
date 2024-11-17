@@ -135,7 +135,7 @@ public class RoomCrud {
 //        }
 
         // Добавление записи в таблицу заказов
-        String insertBookingSQL = "INSERT INTO Bookings (UserID, CheckInDate, CheckOutDate, BookingStatus) VALUES (?, ?, ?, 'confirmed') RETURNING BookingID";
+        String insertBookingSQL = "INSERT INTO Bookings (UserID, CheckInDate, CheckOutDate) VALUES (?, ?, ?) RETURNING BookingID";
         int bookingId;
         try (PreparedStatement insertBookingStmt = connection.prepareStatement(insertBookingSQL)) {
             insertBookingStmt.setInt(1, userId);
@@ -188,8 +188,7 @@ public class RoomCrud {
                 "r.RoomPhoto, " +
                 "b.CheckInDate, " +
                 "b.bookingDate, " +
-                "b.CheckOutDate, " +
-                "b.BookingStatus " +
+                "b.CheckOutDate " +
                 "FROM Bookings b " +
                 "JOIN BookingRooms br ON b.BookingID = br.BookingID " +
                 "JOIN Rooms r ON br.RoomID = r.RoomID " +
@@ -212,7 +211,7 @@ public class RoomCrud {
                 LocalDate checkInDate = rs.getDate("CheckInDate").toLocalDate();
                 LocalDate bookingDate = rs.getDate("bookingDate").toLocalDate();
                 LocalDate checkOutDate = rs.getDate("CheckOutDate").toLocalDate();
-                String bookingStatus = rs.getString("BookingStatus");
+//                String bookingStatus = rs.getString("BookingStatus");
 
                 BookedRoom room = new BookedRoom(roomNumber, description, roomCapacity, roomCost, roomPhoto, checkInDate, checkOutDate, bookingDate);
                 bookedRooms.add(room);

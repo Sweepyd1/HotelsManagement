@@ -10,14 +10,9 @@ import javafx.scene.control.*;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-
-
-
-
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import com.example.course_work.database.RoomCrud;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -134,7 +129,15 @@ public class AdminRoomsController {
                 roomCrud.deleteRoom(selectedRoom[0]);
             }
             catch (SQLException e) {
+                showAlert("Ошибка", "Пожалуйста, выберите комнату для удаления.");
                 System.out.println(e.getMessage());
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Ошибка");
+                alert.setHeaderText(null); // Убираем заголовок
+                alert.setContentText("Завтра туда заедет клиент, удалять уже поздно"); // Текст сообщения
+
+                // Отображение окна
+                alert.showAndWait();
             }
             data.remove(selectedRoom);
         } else {

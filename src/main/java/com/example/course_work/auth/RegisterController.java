@@ -28,7 +28,7 @@ public class RegisterController {
     @FXML
     private PasswordField passwordField;
     @FXML
-    private Text authorization; // Ссылка на текст, который будет кликабельным
+    private Text authorization;
 
     @FXML
     public void initialize() {
@@ -52,8 +52,6 @@ public class RegisterController {
         App.setRoot("mainWindow");
     }
 
-
-
     @FXML
     private void createUser() {
         String name = nameField.getText();
@@ -66,7 +64,6 @@ public class RegisterController {
             System.out.println("Все поля должны быть заполнены.");
             return;
         }
-
 
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
             UserCrud userCrud = new UserCrud(connection);

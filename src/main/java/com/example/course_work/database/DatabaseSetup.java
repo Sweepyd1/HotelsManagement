@@ -88,10 +88,11 @@ public class DatabaseSetup {
                     "UserID INT NOT NULL REFERENCES Users(UserID)," +
                     "BookingDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
                     "CheckInDate DATE NOT NULL," +
-                    "CheckOutDate DATE NOT NULL," +
-                    "BookingStatus TEXT NOT NULL CHECK (BookingStatus IN ('confirmed', 'canceled'))" +
+                    "CheckOutDate DATE NOT NULL" +
                     ")";
             statement.executeUpdate(createBookingsTable);
+
+            //                    "BookingStatus TEXT NOT NULL CHECK (BookingStatus IN ('confirmed', 'canceled'))" +
 
             // Создание таблицы комнат в броне
             String createBookingRoomsTable = "CREATE TABLE IF NOT EXISTS BookingRooms (" +
@@ -100,6 +101,8 @@ public class DatabaseSetup {
                     "PRIMARY KEY (BookingID, RoomID)" +
                     ")";
             statement.executeUpdate(createBookingRoomsTable);
+
+            createTrigger(statement);
 
             // Создание таблицы услуг в броне
 //            String createBookingServicesTable = "CREATE TABLE IF NOT EXISTS BookingServices (" +
@@ -131,10 +134,45 @@ public class DatabaseSetup {
                 }
             }
 
+
+
             System.out.println("Таблицы созданы или уже существуют и заполнены.");
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    private void createTrigger(Statement statement) {
+        // Create the function if it doesn't exist
+        String createFunctionSQL = "CREATE OR REPLACE FUNCTION prevent_booking_deletion() " +
+                "RETURNS TRIGGER AS $$ " +
+                "BEGIN " +
+                "IF (OLD.CheckInDate::TIMESTAMP - CURRENT_TIMESTAMP) < INTERVAL '24 hours' THEN " +
+                "RAISE EXCEPTION 'Cannot delete booking less than 24 hours before check-in'; " +
+                "END IF; " +
+                "RETURN OLD; " +
+                "END; $$ LANGUAGE plpgsql;";
+
+        try {
+            statement.executeUpdate(createFunctionSQL);
+        } catch (SQLException e) {
+            // Ignore if function already exists or handle accordingly
+            System.out.println("Функция prevent_booking_deletion уже существует или ошибка при создании.");
+        }
+
+        // Create the trigger
+        String createTriggerSQL = "CREATE TRIGGER prevent_booking_deletion_trigger " +
+                "BEFORE DELETE ON Bookings " +
+                "FOR EACH ROW EXECUTE FUNCTION prevent_booking_deletion();";
+
+        try {
+            statement.executeUpdate(createTriggerSQL);
+        } catch (SQLException e) {
+            // Ignore if trigger already exists or handle accordingly
+            System.out.println("Триггер prevent_booking_deletion_trigger уже существует или ошибка при создании.");
+        }
+    }
+
+
 }

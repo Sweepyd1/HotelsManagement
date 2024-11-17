@@ -97,7 +97,7 @@ public class ChangeWindowController {
 
     @FXML
     public void showAdminBookingsPage() {
-        loadPage("admin_bookings.fxml", "брони");
+        loadPage("admin/admin_bookings.fxml", "брони");
 //        highlightButton(adminButton);
     }
 
