@@ -28,11 +28,6 @@ public class AllRoomsController {
 
     @FXML
     public void initialize() {
-
-//        openFilter.setOnAction(event -> {
-//            openFilterWindow();
-//        });
-
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
             RoomCrud roomCrud = new RoomCrud(connection);
             List<Room> freeRooms = roomCrud.getFilteredRooms();
@@ -42,7 +37,6 @@ public class AllRoomsController {
                 for (int i = 0; i < freeRooms.size(); i++) {
                     Room room = freeRooms.get(i);
                     try {
-
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("hotel.fxml")); // Укажите правильный путь к вашему FXML
                         VBox roomVBox = loader.load();
 

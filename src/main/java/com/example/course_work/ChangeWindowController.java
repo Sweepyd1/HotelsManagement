@@ -21,6 +21,9 @@ public class ChangeWindowController {
 
     @FXML
     public Button bookings;
+
+    @FXML
+    public Button users;
     @FXML
     private AnchorPane mainContent;
     @FXML

@@ -33,7 +33,7 @@ public class RoomCrud {
         boolean spa = SessionManager.getInstance().isSpa();
         boolean petFriendly = SessionManager.getInstance().isPetFriendly();
 
-        // Добавляем условия фильтрации
+        
         List<String> conditions = new ArrayList<>();
 
         if (minPrice >= 0) {
