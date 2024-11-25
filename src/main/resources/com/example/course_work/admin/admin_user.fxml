@@ -28,12 +28,12 @@
         </HBox>
         <TableView fx:id="tableView" layoutX="43.0" layoutY="26.0" prefHeight="374.0" prefWidth="600.0" style="-fx-background-color: #28293c;" stylesheets="@../styles/table.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
             <columns>
-                <TableColumn fx:id="user_id" text="Номер комнаты" />
-                <TableColumn fx:id="username" text="Описание комнаты" />
-                <TableColumn fx:id="usersurname" text="Вместимость" />
-                <TableColumn fx:id="userlogin" text="Стоимость" />
-                <TableColumn fx:id="userpassword" text="Фото (URL)" />
-                <TableColumn fx:id="user_role" text="ID Доп.Сервиса" />
+                <TableColumn fx:id="user_id" text="ID" />
+                <TableColumn fx:id="username" text="имя" />
+                <TableColumn fx:id="usersurname" text="фамилия" />
+                <TableColumn fx:id="userlogin" text="логин" />
+                <TableColumn fx:id="userpassword" text="пароль" />
+                <TableColumn fx:id="user_role" text="Роль" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

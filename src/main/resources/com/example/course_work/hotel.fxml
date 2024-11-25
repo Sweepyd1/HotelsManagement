@@ -6,10 +6,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" onMouseClicked="#getRoomInfo" spacing="20" style="-fx-background-color: #39364f; -fx-padding: 20; -fx-pref-width: 450; -fx-max-width: 450; -fx-min-width: 350; -fx-border-radius: 10px; -fx-background-radius:10px;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.course_work.RoomCartController">
+<VBox alignment="CENTER" onMouseClicked="#getRoomInfo" spacing="20" style="-fx-background-color: #39364f; -fx-padding: 20; -fx-pref-width: 450; -fx-max-width: 450; -fx-min-width: 350; -fx-border-radius: 10px; -fx-background-radius:10px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_work.RoomCartController">
 
 
-                <ImageView fx:id="roomImageView" fitHeight="350" fitWidth="200" preserveRatio="true" />
+                <ImageView fx:id="roomImageView" fitHeight="253.0" fitWidth="389.0" preserveRatio="true" />
                 <VBox spacing="10">
                         <Label style="-fx-font-size: 18px; -fx-text-fill: #FFFFFF;" text="Номер комнаты" wrapText="true" />
                         <Label fx:id="titleLabel" maxWidth="200" style="-fx-font-size: 16px; -fx-text-fill: #808080;" wrapText="true" />

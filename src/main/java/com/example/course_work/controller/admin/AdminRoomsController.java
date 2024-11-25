@@ -85,7 +85,9 @@ public class AdminRoomsController {
 
                 roomCrud.addNewRoom(roomDetails[0], roomDetails[1], index2, index3, roomDetails[4], index5);
 
-                data.add(roomDetails);
+                data.clear();
+
+                loadAlldata();
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

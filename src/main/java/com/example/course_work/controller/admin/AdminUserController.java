@@ -2,7 +2,9 @@ package com.example.course_work.controller.admin;
 
 
 import com.example.course_work.database.DBCONN;
-import com.example.course_work.models.Room;
+import com.example.course_work.database.UserCrud;
+import com.example.course_work.models.User;
+import com.example.course_work.models.UserForAdmin;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -77,18 +79,15 @@ public class AdminUserController {
     private void handleAddButtonAction() {
 
         try (Connection connection = DBCONN.getConnection()) {
-            RoomCrud roomCrud = new RoomCrud(connection);
+            UserCrud userCrud = new UserCrud(connection);
 
-            String[] roomDetails = showInputDialog("Добавить комнату", "Введите данные комнаты:");
-            if (roomDetails != null) {
+            String[] userDetails = showInputDialog("Добавить комнату", "Введите данные комнаты:");
+            if (userDetails != null) {
+                System.out.println(userDetails[0]);
 
-                int index2 = Integer.parseInt(roomDetails[2]); // Convert index 2 to int
-                int index3 = Integer.parseInt(roomDetails[3]); // Convert index 3 to int
-                int index5 = Integer.parseInt(roomDetails[5]); // Convert index 5 to int
-
-                roomCrud.addNewRoom(roomDetails[0], roomDetails[1], index2, index3, roomDetails[4], index5);
-
-                data.add(roomDetails);
+                userCrud.createUser(userDetails[0], userDetails[1], userDetails[2], userDetails[3], userDetails[4]);
+                data.clear();
+                loadAlldata();
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -131,8 +130,8 @@ public class AdminUserController {
         String[] selectedRoom = tableView.getSelectionModel().getSelectedItem();
         if (selectedRoom != null) {
             try (Connection connection = DBCONN.getConnection()) {
-                RoomCrud roomCrud = new RoomCrud(connection);
-                roomCrud.deleteRoom(selectedRoom[0]);
+                UserCrud roomCrud = new UserCrud(connection);
+                roomCrud.deleteUser(Integer.parseInt(selectedRoom[0]));
             }
             catch (SQLException e) {
                 showAlert("Ошибка", "Пожалуйста, выберите комнату для удаления.");
@@ -186,15 +185,9 @@ public class AdminUserController {
         TextField photoField = new TextField(defaultValues != null ? defaultValues[4] : "");
         TextField serviceField = new TextField(defaultValues != null ? defaultValues[5] : "");
 
-        Button fileButton = new Button("Выбрать фото");
-        FileChooser fileChooser = new FileChooser();
 
-        fileButton.setOnAction(event -> {
-            File selectedFile = fileChooser.showOpenDialog(dialog.getOwner());
-            if (selectedFile != null) {
-                photoField.setText(selectedFile.toURI().toString()); // Set the path in the text field
-            }
-        });
+
+
 
         GridPane grid = new GridPane();
 
@@ -214,7 +207,7 @@ public class AdminUserController {
         grid.add(photoField, 1, 4);
 
         // Add the button to the grid instead of the FileChooser
-        grid.add(fileButton, 1, 5);
+
 
         dialog.getDialogPane().setContent(grid);
 
@@ -240,16 +233,16 @@ public class AdminUserController {
 
     public void loadAlldata() {
         try (Connection connection = DBCONN.getConnection()) {
-            RoomCrud roomCrud = new RoomCrud(connection);
-            List<Room> roomsData = roomCrud.getAllRoomData(); // Fetch all rooms
-            for (Room room : roomsData) {
+            UserCrud userCrud = new UserCrud(connection);
+            List<UserForAdmin> userData = userCrud.getAllUserData(); // Fetch all rooms
+            for (UserForAdmin user : userData) {
                 String[] roomDetails = new String[6]; // Adjust size based on your columns
-                roomDetails[0] = room.getRoomNumber();
-                roomDetails[1] = room.getDescription();
-                roomDetails[2] = String.valueOf(room.getCapacity());
-                roomDetails[3] = String.valueOf(room.getPrice());
-                roomDetails[4] = room.getPhoto();
-                roomDetails[5] = String.valueOf(room.getServiceId());
+                roomDetails[0] = String.valueOf(user.getId());
+                roomDetails[1] = user.getUsername();
+                roomDetails[2] = user.getSurname();
+                roomDetails[3] = user.getLogin();
+                roomDetails[4] = user.getPassword();
+                roomDetails[5] = user.getRole();
                 data.add(roomDetails); // Add the String array to the ObservableList
             }
         } catch (SQLException e) {

@@ -2,6 +2,7 @@ package com.example.course_work.database;
 
 import com.example.course_work.SessionManager;
 import com.example.course_work.models.BookedRoom;
+import com.example.course_work.models.BookingInfo;
 import com.example.course_work.models.Room;
 
 import java.sql.*;
@@ -227,7 +228,7 @@ public class RoomCrud {
         String deleteBookingRoomsSql = "DELETE FROM BookingRooms WHERE BookingID = ?";
         String deleteBookingSql = "DELETE FROM Bookings WHERE BookingID = ?";
 
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
+        try (Connection connection = DBCONN.getConnection()) {
             connection.setAutoCommit(false); // Начинаем транзакцию
 
             int bookingId = -1; // Идентификатор бронирования
@@ -378,6 +379,44 @@ public class RoomCrud {
         return rooms; // Return the list of rooms
     }
 
+    public List<BookingInfo> getAllBookings() {
+        String query = "SELECT b.BookingID, u.UserID, u.UserName, u.UserSurname, "
+                + "b.CheckInDate, b.CheckOutDate, b.BookingDate, "
+                + "(b.CheckOutDate - b.CheckInDate) AS countDay, " // Используем вычитание
+                + "(r.RoomCost * (b.CheckOutDate - b.CheckInDate)) AS total_price, " // Итоговая цена
+                + "r.roomNumber "
+                + "FROM Bookings b "
+                + "JOIN Users u ON b.UserID = u.UserID "
+                + "JOIN BookingRooms br ON b.BookingID = br.BookingID "
+                + "JOIN Rooms r ON br.RoomID = r.RoomID";
+
+        List<BookingInfo> bookings = new ArrayList<>();
+
+        try (Connection connection = DBCONN.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                BookingInfo booking = new BookingInfo(
+                        rs.getInt("BookingID"),
+                        rs.getInt("UserID"),
+                        rs.getString("UserName"),
+                        rs.getString("UserSurname"),
+                        rs.getDate("CheckInDate"),
+                        rs.getDate("CheckOutDate"),
+                        rs.getTimestamp("BookingDate"),
+                        rs.getInt("countDay"), // Это будет разница в днях
+                        rs.getDouble("total_price"),
+                        rs.getString("roomNumber")
+                );
+                bookings.add(booking);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return bookings;
+    }
 }
 
 

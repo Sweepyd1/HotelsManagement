@@ -37,7 +37,6 @@
                 <TableColumn fx:id="bookingdate" text="дата бронирования" />
                 <TableColumn fx:id="countDay" text="количество дней" />
                 <TableColumn fx:id="total_price" text="итоговая цена" />
-                <TableColumn fx:id="comment" text="комментарий" />
                 <TableColumn fx:id="titleRoom" text="название комнаты" />
 <!--                <TableColumn fx:id="status" text="статус" />-->
             </columns>

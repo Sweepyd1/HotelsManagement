@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.course_work.models.User;
+import com.example.course_work.models.UserForAdmin;
 
 public class UserCrud {
     private Connection connection;
@@ -62,7 +63,7 @@ public class UserCrud {
 
     // Удаление пользователя
     public void deleteUser(int id) throws SQLException {
-        String sql = "DELETE FROM users WHERE id = ?";
+        String sql = "DELETE FROM users WHERE userid = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, id);
 
@@ -117,22 +118,22 @@ public class UserCrud {
     }
 
 
-    public List<User> getAllRoomData() {
+    public List<UserForAdmin> getAllUserData() {
         String selectRoomSQL = "SELECT * FROM users";
-        List<User> rooms = new ArrayList<>();
+        List<UserForAdmin> rooms = new ArrayList<>();
 
         try (PreparedStatement roomPstmt = connection.prepareStatement(selectRoomSQL);
              ResultSet resultSet = roomPstmt.executeQuery()) { // Use executeQuery for SELECT
 
             while (resultSet.next()) {
                 // Assuming Room class has a constructor that matches your table structure
-                User user = new User(
+                UserForAdmin user = new UserForAdmin(
 
-                        resultSet.getInt("userid"),
-                        resultSet.getString("username"),
-                        resultSet.getString("usersurname"),
-                        resultSet.getString("userpassword"),
-                        resultSet.getString("userlogin"),
+                        resultSet.getInt("userid"), // ID
+                        resultSet.getString("username"), // имя
+                        resultSet.getString("usersurname"), // фамилия
+                        resultSet.getString("userlogin"), // логин
+                        resultSet.getString("userpassword"), // пароль
                         resultSet.getString("userrole")
 
                 );
@@ -144,6 +145,12 @@ public class UserCrud {
 
         return rooms; // Return the list of rooms
     }
+
+
+
+
+
+
 
 }
 
