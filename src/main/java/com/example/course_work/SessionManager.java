@@ -166,6 +166,27 @@ public class SessionManager {
         // Получаем значения из элементов управления
         LocalDate checkInDate = checkInDatePicker.getValue();
         LocalDate checkOutDate = checkOutDatePicker.getValue();
+        LocalDate currentDate = LocalDate.now();
+
+        if (checkInDate == null || checkOutDate == null) {
+            showAlert("Ошибка", "Пожалуйста, выберите даты заезда и выезда.");
+            return;
+        }
+
+        // Проверка, что даты не меньше текущего дня
+        if (checkInDate.isBefore(currentDate) || checkOutDate.isBefore(currentDate)) {
+            showAlert("Ошибка", "Выбранные даты не могут быть меньше текущего дня.");
+            return;
+        }
+
+        // Проверка, что дата заезда не больше даты выезда
+        if (checkInDate.isAfter(checkOutDate)) {
+            showAlert("Ошибка", "Дата заезда не может быть позже даты выезда.");
+            return;
+        }
+
+
+
         double minPrice = minPriceSlider.getValue();
         double maxPrice = maxPriceSlider.getValue();
         boolean wifi = wifiCheckBox.isSelected();
@@ -189,6 +210,8 @@ public class SessionManager {
 
 
 
+
+
         // Логика применения фильтров...
         System.out.println("Выбрано количество мест: " + selectedCapacity);
 
@@ -203,4 +226,12 @@ public class SessionManager {
                 ", Pet Friendly: " + petFriendly);
     }
 
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }
+

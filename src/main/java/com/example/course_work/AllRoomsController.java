@@ -1,5 +1,6 @@
 package com.example.course_work;
 
+import com.example.course_work.database.DBCONN;
 import com.example.course_work.models.Room;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -28,7 +29,7 @@ public class AllRoomsController {
 
     @FXML
     public void initialize() {
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
+        try (Connection connection = DBCONN.getConnection()) {
             RoomCrud roomCrud = new RoomCrud(connection);
             List<Room> freeRooms = roomCrud.getFilteredRooms();
 
@@ -65,6 +66,7 @@ public class AllRoomsController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
 

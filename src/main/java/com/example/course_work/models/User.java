@@ -3,13 +3,17 @@ package com.example.course_work.models;
 
 public class User {
     private int id;
+    private String name;
     private String username;
+    private String login;
     private String password;
     private String role;
 
-    public User(int id, String username, String password, String role) {
+    public User(int id, String name, String username,String login, String password, String role) {
         this.id = id;
+        this.name = name;
         this.username = username;
+        this.login = login;
         this.password = password;
         this.role = role;
     }

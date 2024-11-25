@@ -32,6 +32,7 @@ public class ChangeWindowController {
     public Button busketButton; // Кнопка "Корзина"
     @FXML
     public Button adminButton; // Кнопка "Админ Панель"
+
     @FXML
     private Text PageTitle;
 
@@ -42,10 +43,12 @@ public class ChangeWindowController {
         if ("admin".equals(SessionManager.getInstance().getUserRole())) {
             adminButton.setVisible(true); // Показываем кнопку для админа
             bookings.setVisible(true);
+            users.setVisible(true);
 
         } else {
             adminButton.setVisible(false); // Скрываем кнопку для других ролей
             bookings.setVisible(false);
+            users.setVisible(false);
 
         }
     }
@@ -101,6 +104,12 @@ public class ChangeWindowController {
     @FXML
     public void showAdminBookingsPage() {
         loadPage("admin/admin_bookings.fxml", "брони");
+//        highlightButton(adminButton);
+    }
+
+    @FXML
+    public void showAdminUserPage() {
+        loadPage("admin/admin_user.fxml", "брони");
 //        highlightButton(adminButton);
     }
 

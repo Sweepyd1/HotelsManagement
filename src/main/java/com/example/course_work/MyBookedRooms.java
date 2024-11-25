@@ -1,4 +1,5 @@
 package com.example.course_work;
+import com.example.course_work.database.DBCONN;
 import com.example.course_work.models.BookedRoom;
 import com.example.course_work.models.Room;
 import javafx.fxml.FXML;
@@ -20,7 +21,8 @@ public class MyBookedRooms {
 
         @FXML
         public void initialize() {
-            try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
+            try (Connection connection = DBCONN.getConnection()) {
+
                 RoomCrud roomCrud = new RoomCrud(connection);
                 List<BookedRoom> freeRooms = roomCrud.getBookedRoomsForUser(SessionManager.getInstance().getId());
 
@@ -44,6 +46,15 @@ public class MyBookedRooms {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        finally {
+                            if (connection != null) {
+                                try {
+                                    connection.close(); // Закрываем соединение
+                                } catch (SQLException e) {
+                                    e.printStackTrace(); // Обработка исключений при закрытии
+                                }
+                            }
+                        }
                     }
                 } else {
                     System.out.println("Нет свободных комнат.");
@@ -51,6 +62,7 @@ public class MyBookedRooms {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
         }
 
 

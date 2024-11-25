@@ -1,4 +1,5 @@
 package com.example.course_work;
+import com.example.course_work.database.DBCONN;
 import com.example.course_work.database.RoomCrud;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -54,7 +55,6 @@ public class MyBookedRoomController {
 
         public void setRoomData( String title, String description, String count, String imagePath, LocalDate in, LocalDate out, LocalDate bookingdate) {
 
-
             this.roomTitle = title;
             this.roomin = in;
             this.roomout = out;
@@ -87,7 +87,7 @@ public class MyBookedRoomController {
                 System.out.println("Пользователь не авторизован.");
                 return;
             }
-            try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
+            try (Connection connection = DBCONN.getConnection()) {
                 RoomCrud roomCrud = new RoomCrud(connection);
                 roomCrud.deletedBooked(userId, roomin, roomout);
                 addToCartButton.setText("удалено");
@@ -99,12 +99,14 @@ public class MyBookedRoomController {
                     alert.setTitle("Ошибка");
                     alert.setHeaderText(null); // Убираем заголовок
                     alert.setContentText("Извините, нельзя отказаться от бронирования меньше чем за сутки до заезда"); // Текст сообщения
-
-                        // Отображение окна
                     alert.showAndWait();
 
+
                 }
-            }
+
+        }
+
+
 
     private void setRoomImage(String imagePath) {
         try {

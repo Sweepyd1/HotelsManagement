@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import com.example.course_work.App;
 import com.example.course_work.SessionManager;
+import com.example.course_work.database.DBCONN;
 import com.example.course_work.database.UserCrud;
 
 import javafx.fxml.FXML;
@@ -65,7 +66,7 @@ public class RegisterController {
             return;
         }
 
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hotel", "postgres", "sweepy2006")) {
+        try (Connection connection = DBCONN.getConnection()) {
             UserCrud userCrud = new UserCrud(connection);
             userCrud.createUser(name, password,login,surname,"user");
             try {

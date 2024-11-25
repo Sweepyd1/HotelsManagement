@@ -41,7 +41,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="users" mnemonicParsing="false" onAction="#showAdminBookingsPage" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #626FCD;" text="Клиенты" textFill="WHITE">
+            <Button fx:id="users" mnemonicParsing="false" onAction="#showAdminUserPage" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #626FCD;" text="Клиенты" textFill="WHITE">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
@@ -57,6 +57,13 @@
             </Button>
          </children>
       </VBox>
-      <AnchorPane fx:id="mainContent" layoutX="100.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #28293c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane fx:id="mainContent" layoutX="100.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #28293c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="444.0" fitWidth="513.0" layoutX="27.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="-100.0" AnchorPane.topAnchor="100.0">
+               <image>
+                  <Image url="@../../../images/main_bg.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
    </children>
 </AnchorPane>

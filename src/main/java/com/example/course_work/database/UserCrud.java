@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.course_work.models.User;
 
@@ -35,7 +37,7 @@ public class UserCrud {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new User(rs.getInt("userid"), rs.getString("username"), rs.getString("userpassword"), rs.getString("userrole"));
+                return new User(rs.getInt("userid"), rs.getString("username"),rs.getString("usersurname"),rs.getString("userlogin"), rs.getString("userpassword"), rs.getString("userrole"));
             }
         }
         return null; // Пользователь не найден
@@ -114,4 +116,35 @@ public class UserCrud {
         return null; // Если пользователь не найден, возвращаем null
     }
 
+
+    public List<User> getAllRoomData() {
+        String selectRoomSQL = "SELECT * FROM users";
+        List<User> rooms = new ArrayList<>();
+
+        try (PreparedStatement roomPstmt = connection.prepareStatement(selectRoomSQL);
+             ResultSet resultSet = roomPstmt.executeQuery()) { // Use executeQuery for SELECT
+
+            while (resultSet.next()) {
+                // Assuming Room class has a constructor that matches your table structure
+                User user = new User(
+
+                        resultSet.getInt("userid"),
+                        resultSet.getString("username"),
+                        resultSet.getString("usersurname"),
+                        resultSet.getString("userpassword"),
+                        resultSet.getString("userlogin"),
+                        resultSet.getString("userrole")
+
+                );
+                rooms.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving room data: " + e.getMessage(), e);
+        }
+
+        return rooms; // Return the list of rooms
+    }
+
 }
+
+

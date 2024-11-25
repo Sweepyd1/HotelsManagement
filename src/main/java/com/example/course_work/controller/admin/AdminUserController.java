@@ -1,5 +1,6 @@
 package com.example.course_work.controller.admin;
 
+
 import com.example.course_work.database.DBCONN;
 import com.example.course_work.models.Room;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,33 +19,33 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.sql.Connection;
-import java.sql.DriverManager;
+
 import java.sql.SQLException;
-import java.util.Arrays;
+
 import java.util.List;
 
-public class AdminRoomsController {
 
+public class AdminUserController {
 
     @FXML
     private TableView<String[]> tableView;
 
     @FXML
-    private TableColumn<String[], String> roomNumberColumn;
+    private TableColumn<String[], String> user_id;
 
     @FXML
-    private TableColumn<String[], String> descriptionColumn;
+    private TableColumn<String[], String> username;
 
     @FXML
-    private TableColumn<String[], String> capacityColumn;
+    private TableColumn<String[], String> usersurname;
 
     @FXML
-    private TableColumn<String[], String> costColumn;
+    private TableColumn<String[], String> userlogin;
 
     @FXML
-    private TableColumn<String[], String> photoColumn;
+    private TableColumn<String[], String> userpassword;
     @FXML
-    public TableColumn<String[], String> serviceColumn;
+    public TableColumn<String[], String> user_role;
 
 
 
@@ -55,18 +56,20 @@ public class AdminRoomsController {
     @FXML
     public void initialize() {
 
+
+
         data = FXCollections.observableArrayList();
         tableView.setItems(data);
         loadAlldata();
 
-        roomNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[0]));
-        descriptionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[1]));
-        capacityColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[2]));
-        costColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[3]));
-        photoColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[4]));
-        serviceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[5]));
+        user_id.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[0]));
+        username.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[1]));
+        usersurname.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[2]));
+        userlogin.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[3]));
+        userpassword.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[4]));
+        user_role.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[5]));
 
-
+        // Add a listener for mouse clicks on the table view
         tableView.setOnMouseClicked(this::handleRowSelection);
     }
 
@@ -106,14 +109,14 @@ public class AdminRoomsController {
                 try (Connection connection = DBCONN.getConnection()) {
                     RoomCrud roomCrud = new RoomCrud(connection);
 
-                        int index2 = Integer.parseInt(updatedDetails[2]); // Convert index 2 to int
-                        int index3 = Integer.parseInt(updatedDetails[3]); // Convert index 3 to int
-                        int index5 = Integer.parseInt(updatedDetails[5]); // Convert index 5 to int
-                        roomCrud.updateRoomData(updatedDetails[0], updatedDetails[1], index2, index3, updatedDetails[4], index5, selectedRoom[0]);
-                    }
+                    int index2 = Integer.parseInt(updatedDetails[2]); // Convert index 2 to int
+                    int index3 = Integer.parseInt(updatedDetails[3]); // Convert index 3 to int
+                    int index5 = Integer.parseInt(updatedDetails[5]); // Convert index 5 to int
+                    roomCrud.updateRoomData(updatedDetails[0], updatedDetails[1], index2, index3, updatedDetails[4], index5, selectedRoom[0]);
+                }
                 catch (SQLException e) {
                     System.out.println(e.getMessage());
-            }
+                }
 
                 int index = data.indexOf(selectedRoom);
                 data.set(index, updatedDetails);
@@ -174,7 +177,7 @@ public class AdminRoomsController {
         dialog.setHeaderText(headerText);
 
         // Create input fields
-        TextField roomNumberField = new TextField(defaultValues != null ? defaultValues[0] : "");
+//        TextField user_id = new TextField(defaultValues != null ? defaultValues[0] : "");
         TextArea descriptionField = new TextArea(defaultValues != null ? defaultValues[1] : "");
         descriptionField.setWrapText(true);
 
@@ -183,11 +186,9 @@ public class AdminRoomsController {
         TextField photoField = new TextField(defaultValues != null ? defaultValues[4] : "");
         TextField serviceField = new TextField(defaultValues != null ? defaultValues[5] : "");
 
-        // Create a button to open the FileChooser
         Button fileButton = new Button("Выбрать фото");
         FileChooser fileChooser = new FileChooser();
 
-        // Set up the button action
         fileButton.setOnAction(event -> {
             File selectedFile = fileChooser.showOpenDialog(dialog.getOwner());
             if (selectedFile != null) {
@@ -195,29 +196,25 @@ public class AdminRoomsController {
             }
         });
 
-        // Create a grid for layout
         GridPane grid = new GridPane();
 
-        grid.add(new Label("Номер комнаты:"), 0, 0);
-        grid.add(roomNumberField, 1, 0);
+        grid.add(new Label("Роль пользователя"), 0, 0);
+        grid.add(serviceField, 1, 0);
 
-        grid.add(new Label("Описание:"), 0, 1);
+        grid.add(new Label("имя:"), 0, 1);
         grid.add(descriptionField, 1, 1);
 
-        grid.add(new Label("Вместимость:"), 0, 2);
+        grid.add(new Label("фамилия:"), 0, 2);
         grid.add(capacityField, 1, 2);
 
-        grid.add(new Label("Стоимость:"), 0, 3);
+        grid.add(new Label("логин"), 0, 3);
         grid.add(costField, 1, 3);
 
-        grid.add(new Label("Фото (URL):"), 0, 4);
+        grid.add(new Label("пароль"), 0, 4);
         grid.add(photoField, 1, 4);
 
         // Add the button to the grid instead of the FileChooser
         grid.add(fileButton, 1, 5);
-
-        grid.add(new Label("Сервис комнаты"), 0, 6);
-        grid.add(serviceField, 1, 6);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -227,7 +224,7 @@ public class AdminRoomsController {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == okButtonType) {
                 return new String[]{
-                        roomNumberField.getText(),
+//                        roomNumberField.getText(),
                         descriptionField.getText(),
                         capacityField.getText(),
                         costField.getText(),
@@ -241,13 +238,10 @@ public class AdminRoomsController {
         return dialog.showAndWait().orElse(null); // Show dialog and wait for result
     }
 
-
     public void loadAlldata() {
         try (Connection connection = DBCONN.getConnection()) {
             RoomCrud roomCrud = new RoomCrud(connection);
-
             List<Room> roomsData = roomCrud.getAllRoomData(); // Fetch all rooms
-
             for (Room room : roomsData) {
                 String[] roomDetails = new String[6]; // Adjust size based on your columns
                 roomDetails[0] = room.getRoomNumber();
@@ -256,26 +250,12 @@ public class AdminRoomsController {
                 roomDetails[3] = String.valueOf(room.getPrice());
                 roomDetails[4] = room.getPhoto();
                 roomDetails[5] = String.valueOf(room.getServiceId());
-
                 data.add(roomDetails); // Add the String array to the ObservableList
             }
-
-
-
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
-
-
-
-
-
-
-
-
-    // Method to show alerts
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -284,3 +264,4 @@ public class AdminRoomsController {
         alert.showAndWait();
     }
 }
+
