@@ -1,25 +1,21 @@
 package com.example.course_work.controller.admin;
 
 import com.example.course_work.database.DBCONN;
-import com.example.course_work.database.RoomCrud;
-import com.example.course_work.database.UserCrud;
+import com.example.course_work.database.Room;
 import com.example.course_work.models.BookingInfo;
-import com.example.course_work.models.Room;
-import com.example.course_work.models.UserForAdmin;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.stage.FileChooser;
+import javafx.scene.layout.VBox;
 
-import java.io.File;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminBookingsController {
@@ -83,48 +79,65 @@ public class AdminBookingsController {
     }
 
     @FXML
-    private void handleAddButtonAction() {
+    private void handleAddButtonAction() throws SQLException {
 
-        try (Connection connection = DBCONN.getConnection()) {
-            RoomCrud roomCrud = new RoomCrud(connection);
 
-            String[] inputData = showInputDialog("Добавить комнату", "Введите данные комнаты:");
+
+
+            String[] inputData = showInputDialog("Создание бронирования", "Введите данные бронирования", null);
             if (inputData != null) {
-                LocalDate currentDate = LocalDate.now();
-                int userId = Integer.parseInt(inputData[0]);
-                int roomId = Integer.parseInt(inputData[1]);
-                LocalDate checkInDate = LocalDate.parse(inputData[2]);
-                LocalDate checkOutDate = LocalDate.parse(inputData[3]);
+                String userId = inputData[0];
+                String roomIdsString = inputData[1]; // Комнаты как строка
+                String additionalUserNamesString = inputData[2]; // Дополнительные пользователи как строка
+                String checkInDate = inputData[3];
+                String checkOutDate = inputData[4];
+
+                try (Connection connection = DBCONN.getConnection()) {
+                    // 1. Вставка записи в таблицу Bookings
+                    String insertBookingQuery = "INSERT INTO Bookings (UserID, CheckInDate, CheckOutDate, peoples) VALUES (?, ?, ?, ?) RETURNING BookingID";
+
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(insertBookingQuery)) {
+                        preparedStatement.setInt(1, Integer.parseInt(userId));
+                        preparedStatement.setDate(2, Date.valueOf(checkInDate));
+                        preparedStatement.setDate(3, Date.valueOf(checkOutDate));
+                        preparedStatement.setArray(4, connection.createArrayOf("text", additionalUserNamesString.split(","))); // Преобразуем строку в массив текстов
+
+                        // Выполняем вставку и получаем BookingID
+                        int bookingId;
+                        try (ResultSet generatedKeys = preparedStatement.executeQuery()) {
+                            if (generatedKeys.next()) {
+                                bookingId = generatedKeys.getInt(1); // Получаем сгенерированный BookingID
+                            } else {
+                                throw new SQLException("Не удалось получить ID нового бронирования.");
+                            }
+                        }
+
+                        System.out.println("Бронирование успешно добавлено с ID: " + bookingId);
 
 
-                if (checkInDate == null || checkOutDate == null) {
-                    showAlert("Ошибка", "Пожалуйста, выберите даты заезда и выезда.");
-                    return;
+                        // 2. Вставка записей в таблицу BookingRooms
+                        String[] roomIds = roomIdsString.split(","); // Получаем массив ID комнат
+                        String insertBookingRoomQuery = "INSERT INTO BookingRooms (BookingID, RoomID) VALUES (?, ?)";
+
+                        try (PreparedStatement roomPreparedStatement = connection.prepareStatement(insertBookingRoomQuery)) {
+                            for (String roomId : roomIds) {
+                                roomPreparedStatement.setInt(1, bookingId); // Устанавливаем BookingID
+                                roomPreparedStatement.setInt(2, Integer.parseInt(roomId.trim())); // Устанавливаем RoomID
+                                roomPreparedStatement.executeUpdate(); // Выполняем вставку
+                            }
+                        }
+                        data.clear();
+                        loadAlldata();
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        System.out.println("Ошибка при добавлении бронирования: " + e.getMessage());
+                    }
                 }
-
-                // Проверка, что даты не меньше текущего дня
-                if (checkInDate.isBefore(currentDate) || checkOutDate.isBefore(currentDate)) {
-                    showAlert("Ошибка", "Выбранные даты не могут быть меньше текущего дня.");
-                    return;
-                }
-
-                // Проверка, что дата заезда не больше даты выезда
-                if (checkInDate.isAfter(checkOutDate)) {
-                    showAlert("Ошибка", "Дата заезда не может быть позже даты выезда.");
-                    return;
-                }
-
-                System.out.println(userId);
-
-                roomCrud.bookRoom(userId, roomId, checkInDate, checkOutDate);
-                data.clear();
-                loadAlldata();
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
 
     }
+
 
 
     @FXML
@@ -137,15 +150,19 @@ public class AdminBookingsController {
             if (updatedDetails != null) {
 
                 try (Connection connection = DBCONN.getConnection()) {
-                    RoomCrud roomCrud = new RoomCrud(connection);
+                    Room room = new Room(connection);
 
                     int index2 = Integer.parseInt(updatedDetails[2]); // Convert index 2 to int
                     int index3 = Integer.parseInt(updatedDetails[3]); // Convert index 3 to int
                     int index5 = Integer.parseInt(updatedDetails[5]); // Convert index 5 to int
-                    roomCrud.updateRoomData(updatedDetails[0], updatedDetails[1], index2, index3, updatedDetails[4], index5, selectedRoom[0]);
+                    room.updateRoomData(updatedDetails[0], updatedDetails[1], index2, index3, updatedDetails[4], index5, selectedRoom[0]);
                 }
                 catch (SQLException e) {
                     System.out.println(e.getMessage());
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Ошибка");
+                    alert.setHeaderText(null); // Убираем заголовок
+                    alert.setContentText("Завтра туда заедет клиент, удалять уже поздно");
                 }
 
                 int index = data.indexOf(selectedRoom);
@@ -161,21 +178,16 @@ public class AdminBookingsController {
         String[] selectedRoom = tableView.getSelectionModel().getSelectedItem();
         if (selectedRoom != null) {
             try (Connection connection = DBCONN.getConnection()) {
-                RoomCrud roomCrud = new RoomCrud(connection);
-                System.out.println(Integer.parseInt(selectedRoom[0]));
-                System.out.println(LocalDate.parse(selectedRoom[3]));
-                System.out.println(LocalDate.parse(selectedRoom[4]));
-                roomCrud.deletedBooked(Integer.parseInt(selectedRoom[0]), LocalDate.parse(selectedRoom[3]),LocalDate.parse(selectedRoom[4]));
+                Room room = new Room(connection);
+                room.deletedBooked(Integer.parseInt(selectedRoom[0]), LocalDate.parse(selectedRoom[3]),LocalDate.parse(selectedRoom[4]));
             }
             catch (SQLException e) {
-
-
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Ошибка");
                 alert.setHeaderText(null); // Убираем заголовок
                 alert.setContentText("Завтра туда заедет клиент, удалять уже поздно");
 
-                // Отображение окна
+
                 alert.showAndWait();
             }
             data.clear();
@@ -211,34 +223,78 @@ public class AdminBookingsController {
         dialog.setHeaderText(headerText);
 
         // Create input fields
-        TextField userIdField = new TextField(defaultValues != null ? defaultValues[0] : ""); // ID пользователя
+        TextField userIdField = new TextField(defaultValues != null ? defaultValues[0] : ""); // ID главного пользователя
         TextField roomIdField = new TextField(defaultValues != null ? defaultValues[1] : ""); // ID комнаты
         DatePicker checkInDatePicker = new DatePicker(defaultValues != null ? LocalDate.parse(defaultValues[2]) : LocalDate.now()); // Дата заезда
         DatePicker checkOutDatePicker = new DatePicker(defaultValues != null ? LocalDate.parse(defaultValues[3]) : LocalDate.now().plusDays(1)); // Дата выезда
 
+        // Для хранения текстовых полей для комнат
+        VBox roomFieldsContainer = new VBox();
+        roomFieldsContainer.getChildren().add(roomIdField); // Добавляем первое поле для ID комнаты
+
+        // Для хранения текстовых полей для дополнительных пользователей
+        VBox userFieldsContainer = new VBox();
+
+        Button addRoomButton = new Button("Добавить комнату");
+        addRoomButton.setOnAction(e -> {
+            TextField newRoomIdField = new TextField(); // Создаем новое поле для ID комнаты
+            roomFieldsContainer.getChildren().add(newRoomIdField); // Добавляем его в контейнер
+        });
+
+        Button addUserButton = new Button("Добавить пользователя");
+        addUserButton.setOnAction(e -> {
+            TextField newUserNameField = new TextField(); // Создаем новое поле для ФИО дополнительного пользователя
+            userFieldsContainer.getChildren().add(newUserNameField); // Добавляем его в контейнер
+        });
+
         GridPane grid = new GridPane();
-        grid.add(new Label("ID пользователя:"), 0, 0);
+        grid.add(new Label("ID главного пользователя:"), 0, 0);
         grid.add(userIdField, 1, 0);
 
-        grid.add(new Label("ID комнаты:"), 0, 1);
-        grid.add(roomIdField, 1, 1);
+        grid.add(new Label("Комнаты:"), 0, 1);
+        grid.add(roomFieldsContainer, 1, 1);
+        grid.add(addRoomButton, 1, 2); // Кнопка для добавления комнаты
 
-        grid.add(new Label("Дата заезда:"), 0, 2);
-        grid.add(checkInDatePicker, 1, 2);
+        grid.add(new Label("Дополнительные пользователи:"), 0, 3);
+        grid.add(userFieldsContainer, 1, 3);
+        grid.add(addUserButton, 1, 4); // Кнопка для добавления пользователя
 
-        grid.add(new Label("Дата выезда:"), 0, 3);
-        grid.add(checkOutDatePicker, 1, 3);
+        grid.add(new Label("Дата заезда:"), 0, 5);
+        grid.add(checkInDatePicker, 1, 5);
 
-        dialog.getDialogPane().setContent(grid);
+        grid.add(new Label("Дата выезда:"), 0, 6);
+        grid.add(checkOutDatePicker, 1, 6);
+
+        // Создаем ScrollPane и добавляем в него GridPane
+        ScrollPane scrollPane = new ScrollPane(grid);
+        scrollPane.setFitToWidth(true); // Устанавливаем ширину ScrollPane равной ширине содержимого
+
+        dialog.getDialogPane().setContent(scrollPane); // Устанавливаем ScrollPane как содержимое диалога
 
         ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == okButtonType) {
+                // Собираем данные из полей
+                List<String> roomIds = new ArrayList<>();
+                for (Node node : roomFieldsContainer.getChildren()) {
+                    if (node instanceof TextField) {
+                        roomIds.add(((TextField) node).getText());
+                    }
+                }
+
+                List<String> additionalUserNames = new ArrayList<>();
+                for (Node node : userFieldsContainer.getChildren()) {
+                    if (node instanceof TextField) {
+                        additionalUserNames.add(((TextField) node).getText());
+                    }
+                }
+
                 return new String[]{
-                        userIdField.getText(),           // ID пользователя
-                        roomIdField.getText(),           // ID комнаты
+                        userIdField.getText(),                  // ID главного пользователя
+                        String.join(",", roomIds),              // Комнаты как строка
+                        String.join(",", additionalUserNames),   // Дополнительные пользователи как строка
                         checkInDatePicker.getValue() != null ? checkInDatePicker.getValue().toString() : "", // Дата заезда
                         checkOutDatePicker.getValue() != null ? checkOutDatePicker.getValue().toString() : "" // Дата выезда
                 };
@@ -251,8 +307,8 @@ public class AdminBookingsController {
 
     public void loadAlldata() {
         try (Connection connection = DBCONN.getConnection()) {
-            RoomCrud roomCrud = new RoomCrud(connection);
-            List<BookingInfo> userData = roomCrud.getAllBookings(); // Получаем все бронирования
+            Room room = new Room(connection);
+            List<BookingInfo> userData = room.getAllBookings(); // Получаем все бронирования
             for (BookingInfo booking : userData) {
                 String[] roomDetails = new String[9]; // Размер массива соответствует количеству колонок
                 roomDetails[0] = String.valueOf(booking.getUserID()); // ID бронирования

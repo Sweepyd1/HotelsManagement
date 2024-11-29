@@ -1,7 +1,6 @@
 package com.example.course_work.controller.admin;
 
 import com.example.course_work.database.DBCONN;
-import com.example.course_work.models.Room;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,14 +12,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import com.example.course_work.database.RoomCrud;
+import com.example.course_work.database.Room;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 
 public class AdminRoomsController {
@@ -46,10 +48,6 @@ public class AdminRoomsController {
     @FXML
     public TableColumn<String[], String> serviceColumn;
 
-
-
-
-
     private ObservableList<String[]> data;
 
     @FXML
@@ -66,7 +64,6 @@ public class AdminRoomsController {
         photoColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[4]));
         serviceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[5]));
 
-
         tableView.setOnMouseClicked(this::handleRowSelection);
     }
 
@@ -74,7 +71,7 @@ public class AdminRoomsController {
     private void handleAddButtonAction() {
 
         try (Connection connection = DBCONN.getConnection()) {
-            RoomCrud roomCrud = new RoomCrud(connection);
+            Room room = new Room(connection);
 
             String[] roomDetails = showInputDialog("Добавить комнату", "Введите данные комнаты:");
             if (roomDetails != null) {
@@ -83,7 +80,7 @@ public class AdminRoomsController {
                 int index3 = Integer.parseInt(roomDetails[3]); // Convert index 3 to int
                 int index5 = Integer.parseInt(roomDetails[5]); // Convert index 5 to int
 
-                roomCrud.addNewRoom(roomDetails[0], roomDetails[1], index2, index3, roomDetails[4], index5);
+                room.addNewRoom(roomDetails[0], roomDetails[1], index2, index3, roomDetails[4], index5);
 
                 data.clear();
 
@@ -102,20 +99,29 @@ public class AdminRoomsController {
         if (selectedRoom != null) {
             System.out.println(selectedRoom[5]);
 
+            // Проверяем, забронирована ли комната
+            try (Connection connection = DBCONN.getConnection()) {
+                Room room = new Room(connection);
+                boolean isBooked = room.isRoomBooked(selectedRoom[0]); // Проверяем по ID комнаты
+
+                if (isBooked) {
+                    showAlert("Ошибка", "Нельзя редактировать комнату, так как она уже забронирована."); // Уведомляем пользователя
+                    return; // Выходим из метода, если комната забронирована
+                }
+            }
+
             String[] updatedDetails = showInputDialog("Редактировать комнату", "Введите новые данные комнаты:", selectedRoom);
             if (updatedDetails != null) {
-
                 try (Connection connection = DBCONN.getConnection()) {
-                    RoomCrud roomCrud = new RoomCrud(connection);
+                    Room room = new Room(connection);
 
-                        int index2 = Integer.parseInt(updatedDetails[2]); // Convert index 2 to int
-                        int index3 = Integer.parseInt(updatedDetails[3]); // Convert index 3 to int
-                        int index5 = Integer.parseInt(updatedDetails[5]); // Convert index 5 to int
-                        roomCrud.updateRoomData(updatedDetails[0], updatedDetails[1], index2, index3, updatedDetails[4], index5, selectedRoom[0]);
-                    }
-                catch (SQLException e) {
+                    int index2 = Integer.parseInt(updatedDetails[2]); // Convert index 2 to int
+                    int index3 = Integer.parseInt(updatedDetails[3]); // Convert index 3 to int
+                    int index5 = Integer.parseInt(updatedDetails[5]); // Convert index 5 to int
+                    room.updateRoomData(updatedDetails[0], updatedDetails[1], index2, index3, updatedDetails[4], index5, selectedRoom[0]);
+                } catch (SQLException e) {
                     System.out.println(e.getMessage());
-            }
+                }
 
                 int index = data.indexOf(selectedRoom);
                 data.set(index, updatedDetails);
@@ -127,15 +133,14 @@ public class AdminRoomsController {
 
     @FXML
     private void handleDeleteButtonAction() {
-        String[] selectedRoom = tableView.getSelectionModel().getSelectedItem();
+        String[] selectedRoom = tableView.getSelectionModel().getSelectedItem(); // Получаем выбранную комнату
         if (selectedRoom != null) {
             try (Connection connection = DBCONN.getConnection()) {
-                RoomCrud roomCrud = new RoomCrud(connection);
-                roomCrud.deleteRoom(selectedRoom[0]);
-            }
-            catch (SQLException e) {
-                showAlert("Ошибка", "Пожалуйста, выберите комнату для удаления.");
-                System.out.println(e.getMessage());
+                Room room = new Room(connection);
+                room.deleteRoom(selectedRoom[0]); // Удаляем комнату по ID
+                data.remove(selectedRoom); // Удаляем комнату из списка данных
+            } catch (SQLException e) {
+                // Если возникает ошибка при удалении, показываем предупреждение
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Ошибка");
                 alert.setHeaderText(null); // Убираем заголовок
@@ -143,10 +148,17 @@ public class AdminRoomsController {
 
                 // Отображение окна
                 alert.showAndWait();
+                System.out.println(e.getMessage()); // Выводим сообщение об ошибке в консоль
             }
-            data.remove(selectedRoom);
         } else {
-            showAlert("Ошибка", "Пожалуйста, выберите комнату для удаления.");
+            // Если комната не выбрана, показываем предупреждение
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText(null); // Убираем заголовок
+            alert.setContentText("Пожалуйста, выберите комнату для удаления."); // Текст сообщения
+
+            // Отображение окна
+            alert.showAndWait();
         }
     }
 
@@ -193,7 +205,17 @@ public class AdminRoomsController {
         fileButton.setOnAction(event -> {
             File selectedFile = fileChooser.showOpenDialog(dialog.getOwner());
             if (selectedFile != null) {
-                photoField.setText(selectedFile.toURI().toString()); // Set the path in the text field
+                String fileName = selectedFile.getName(); // Получаем только имя файла
+                photoField.setText(fileName); // Устанавливаем имя файла в текстовое поле
+
+                // Сохраняем файл в папку resources/images
+                try {
+                    Path sourcePath = selectedFile.toPath();
+                    Path destinationPath = Paths.get("src/main/resources/images/" + fileName); // Путь к папке ресурсов
+                    Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING); // Копируем файл
+                } catch (IOException e) {
+                    e.printStackTrace(); // Обработка ошибок при копировании файла
+                }
             }
         });
 
@@ -212,7 +234,7 @@ public class AdminRoomsController {
         grid.add(new Label("Стоимость:"), 0, 3);
         grid.add(costField, 1, 3);
 
-        grid.add(new Label("Фото (URL):"), 0, 4);
+        grid.add(new Label("Фото (имя файла):"), 0, 4);
         grid.add(photoField, 1, 4);
 
         // Add the button to the grid instead of the FileChooser
@@ -246,11 +268,11 @@ public class AdminRoomsController {
 
     public void loadAlldata() {
         try (Connection connection = DBCONN.getConnection()) {
-            RoomCrud roomCrud = new RoomCrud(connection);
+            Room roomCrud = new Room(connection);
 
-            List<Room> roomsData = roomCrud.getAllRoomData(); // Fetch all rooms
+            List<com.example.course_work.models.Room> roomsData = roomCrud.getAllRoomData(); // Fetch all rooms
 
-            for (Room room : roomsData) {
+            for (com.example.course_work.models.Room room : roomsData) {
                 String[] roomDetails = new String[6]; // Adjust size based on your columns
                 roomDetails[0] = room.getRoomNumber();
                 roomDetails[1] = room.getDescription();

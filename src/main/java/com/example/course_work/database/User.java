@@ -1,5 +1,7 @@
 package com.example.course_work.database;
 
+import com.example.course_work.models.UserForAdmin;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,13 +9,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.course_work.models.User;
-import com.example.course_work.models.UserForAdmin;
-
-public class UserCrud {
+public class User {
     private Connection connection;
 
-    public UserCrud(Connection connection) {
+    public User(Connection connection) {
         this.connection = connection;
     }
 
@@ -32,26 +31,28 @@ public class UserCrud {
     }
 
     // Получение пользователя по ID
-    public User getUserById(int id) throws SQLException {
+    public com.example.course_work.models.User getUserById(int id) throws SQLException {
         String sql = "SELECT * FROM users WHERE userid = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new User(rs.getInt("userid"), rs.getString("username"),rs.getString("usersurname"),rs.getString("userlogin"), rs.getString("userpassword"), rs.getString("userrole"));
+                return new com.example.course_work.models.User(rs.getInt("userid"), rs.getString("username"),rs.getString("usersurname"),rs.getString("userlogin"), rs.getString("userpassword"), rs.getString("userrole"));
             }
         }
         return null; // Пользователь не найден
     }
 
     // Обновление пользователя
-    public void updateUser(int id, String username, String password, String role) throws SQLException {
-        String sql = "UPDATE users SET username = ?, password = ?, role = ? WHERE id = ?";
+    public void updateUser(int id, String username, String usersurname, String userlogin, String password, String role) throws SQLException {
+        String sql = "UPDATE users SET username = ?, usersurname=?, userlogin=?, userpassword = ?, userrole = ? WHERE userid = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, username);
-            pstmt.setString(2, password);
-            pstmt.setString(3, role);
-            pstmt.setInt(4, id);
+            pstmt.setString(2, usersurname);
+            pstmt.setString(3, userlogin);
+            pstmt.setString(4, password);
+            pstmt.setString(5, role);
+            pstmt.setInt(6, id);
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Пользователь успешно обновлен.");

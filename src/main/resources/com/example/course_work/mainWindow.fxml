@@ -50,7 +50,7 @@
       </VBox>
       <VBox layoutY="270.0" prefHeight="261.0" prefWidth="100.0" AnchorPane.bottomAnchor="7.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #d992a9;" text="Выход" textFill="WHITE">
+            <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="97.0" style="-fx-background-color: #d992a9;" text="Выход" textFill="WHITE" onAction="#handleExit">
                <VBox.margin>
                   <Insets top="270.0" />
                </VBox.margin>

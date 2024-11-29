@@ -1,38 +1,37 @@
 package com.example.course_work.database;
 
-import com.example.course_work.SessionManager;
+import com.example.course_work.Session;
 import com.example.course_work.models.BookedRoom;
 import com.example.course_work.models.BookingInfo;
-import com.example.course_work.models.Room;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomCrud {
+public class Room {
 
     private Connection connection;
 
-    public RoomCrud(Connection connection) {
+    public Room(Connection connection) {
         this.connection = connection;
     }
 
-    public List<Room> getFilteredRooms() throws SQLException {
+    public List<com.example.course_work.models.Room> getFilteredRooms() throws SQLException {
         String sql = "SELECT * FROM Rooms WHERE RoomID NOT IN (SELECT br.RoomID FROM BookingRooms br " +
                 "JOIN Bookings b ON br.BookingID = b.BookingID " +
                 "WHERE (b.CheckInDate < ? AND b.CheckOutDate > ?))";
 
         // Получаем параметры фильтрации из SessionManager
-        LocalDate checkInDate = SessionManager.getInstance().getInDate();
-        LocalDate checkOutDate = SessionManager.getInstance().getOutDate();
-        double minPrice = SessionManager.getInstance().getMinPrice();
-        double maxPrice = SessionManager.getInstance().getMaxPrice();
-        int capacity = SessionManager.getInstance().getCapacity();
-        boolean wifi = SessionManager.getInstance().isWifi();
-        boolean breakfast = SessionManager.getInstance().isBreakfast();
-        boolean spa = SessionManager.getInstance().isSpa();
-        boolean petFriendly = SessionManager.getInstance().isPetFriendly();
+        LocalDate checkInDate = Session.getInstance().getInDate();
+        LocalDate checkOutDate = Session.getInstance().getOutDate();
+        double minPrice = Session.getInstance().getMinPrice();
+        double maxPrice = Session.getInstance().getMaxPrice();
+        int capacity = Session.getInstance().getCapacity();
+        boolean wifi = Session.getInstance().isWifi();
+        boolean breakfast = Session.getInstance().isBreakfast();
+        boolean spa = Session.getInstance().isSpa();
+        boolean petFriendly = Session.getInstance().isPetFriendly();
 
         
         List<String> conditions = new ArrayList<>();
@@ -71,7 +70,7 @@ public class RoomCrud {
             sql += " AND " + String.join(" AND ", conditions);
         }
 
-        List<Room> filteredRooms = new ArrayList<>();
+        List<com.example.course_work.models.Room> filteredRooms = new ArrayList<>();
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             int index = 1;
@@ -101,7 +100,7 @@ public class RoomCrud {
                 String photo = rs.getString("RoomPhoto");
                 int serviceId = rs.getInt("serviceid");
 
-                Room room = new Room(roomNumber, description, roomCapacity, price, photo, serviceId);
+                com.example.course_work.models.Room room = new com.example.course_work.models.Room(roomNumber, description, roomCapacity, price, photo, serviceId);
                 filteredRooms.add(room);
             }
         }
@@ -210,7 +209,7 @@ public class RoomCrud {
                 double roomCost = rs.getDouble("RoomCost");
                 String roomPhoto = rs.getString("RoomPhoto");
                 LocalDate checkInDate = rs.getDate("CheckInDate").toLocalDate();
-                LocalDate bookingDate = rs.getDate("bookingDate").toLocalDate();
+                int bookingDate = rs.getInt("roomcost");
                 LocalDate checkOutDate = rs.getDate("CheckOutDate").toLocalDate();
 //                String bookingStatus = rs.getString("BookingStatus");
 
@@ -352,16 +351,16 @@ public class RoomCrud {
 
     }
 
-    public List<Room> getAllRoomData() {
+    public List<com.example.course_work.models.Room> getAllRoomData() {
         String selectRoomSQL = "SELECT * FROM Rooms";
-        List<Room> rooms = new ArrayList<>();
+        List<com.example.course_work.models.Room> rooms = new ArrayList<>();
 
         try (PreparedStatement roomPstmt = connection.prepareStatement(selectRoomSQL);
              ResultSet resultSet = roomPstmt.executeQuery()) { // Use executeQuery for SELECT
 
             while (resultSet.next()) {
                 // Assuming Room class has a constructor that matches your table structure
-                Room room = new Room(
+                com.example.course_work.models.Room room = new com.example.course_work.models.Room(
 
                         resultSet.getString("RoomNumber"),
                         resultSet.getString("RoomDescription"),
@@ -382,15 +381,18 @@ public class RoomCrud {
     public List<BookingInfo> getAllBookings() {
         String query = "SELECT b.BookingID, u.UserID, u.UserName, u.UserSurname, "
                 + "b.CheckInDate, b.CheckOutDate, b.BookingDate, "
-                + "(b.CheckOutDate - b.CheckInDate) AS countDay, " // Используем вычитание
-                + "(r.RoomCost * (b.CheckOutDate - b.CheckInDate)) AS total_price, " // Итоговая цена
-                + "r.roomNumber "
+                + "(b.CheckOutDate - b.CheckInDate) AS countDay, "
+                + "(r.RoomCost * (b.CheckOutDate - b.CheckInDate) + COALESCE(s.ServiceCost, 0) * (b.CheckOutDate - b.CheckInDate)) AS total_price, "
+                + "r.RoomNumber "
                 + "FROM Bookings b "
                 + "JOIN Users u ON b.UserID = u.UserID "
                 + "JOIN BookingRooms br ON b.BookingID = br.BookingID "
-                + "JOIN Rooms r ON br.RoomID = r.RoomID";
+                + "JOIN Rooms r ON br.RoomID = r.RoomID "
+                + "LEFT JOIN Services s ON r.ServiceID = s.ServiceID"; // Добавлено соединение с таблицей Services
 
         List<BookingInfo> bookings = new ArrayList<>();
+        // Остальная часть кода для выполнения запроса и обработки результатов
+
 
         try (Connection connection = DBCONN.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(query);
@@ -417,7 +419,27 @@ public class RoomCrud {
 
         return bookings;
     }
+
+
+    public boolean isRoomBooked(String roomname) throws SQLException {
+        int roomId = this.getSelectedRoomIdByTitle(roomname);
+        String query = "SELECT COUNT(*) FROM bookingrooms WHERE roomid = ?"; // Предполагаем, что у вас есть таблица bookings с полем room_id
+        try (Connection connection = DBCONN.getConnection())
+             {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, roomId); // Устанавливаем ID комнаты в запрос
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    return resultSet.getInt(1) > 0; // Возвращаем true, если есть бронирования
+                }
+            }
+            return false; // Возвращаем false, если нет бронирований
+        }
+        }
+
 }
+
+
 
 
 

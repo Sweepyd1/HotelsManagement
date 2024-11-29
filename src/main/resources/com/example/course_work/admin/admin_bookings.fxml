@@ -16,10 +16,10 @@
                     <HBox.margin>
                         <Insets />
                     </HBox.margin></Button>
-                <Button onAction="#handleEditButtonAction" prefHeight="40.0" prefWidth="197.0" style="-fx-background-color: #9ea5db; -fx-text-fill: white;" text="редактировать">
-                    <HBox.margin>
-                        <Insets left="10.0" />
-                    </HBox.margin></Button>
+<!--                <Button onAction="#handleEditButtonAction" prefHeight="40.0" prefWidth="197.0" style="-fx-background-color: #9ea5db; -fx-text-fill: white;" text="редактировать">-->
+<!--                    <HBox.margin>-->
+<!--                        <Insets left="10.0" />-->
+<!--                    </HBox.margin></Button>-->
                 <Button onAction="#handleDeleteButtonAction" prefHeight="41.0" prefWidth="146.0" style="-fx-background-color: #9ea5db; -fx-text-fill: white;" text="удалить">
                     <HBox.margin>
                         <Insets left="10.0" />

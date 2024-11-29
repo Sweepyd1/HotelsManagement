@@ -88,9 +88,19 @@ public class DatabaseSetup {
                     "UserID INT NOT NULL REFERENCES Users(UserID)," +
                     "BookingDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
                     "CheckInDate DATE NOT NULL," +
-                    "CheckOutDate DATE NOT NULL" +
+                    "CheckOutDate DATE NOT NULL," +
+                    "peoples TEXT[] DEFAULT NULL"+
                     ")";
             statement.executeUpdate(createBookingsTable);
+
+
+            String createRejectionTable = "CREATE TABLE IF NOT EXISTS reject (" +
+                    "rejectId SERIAL PRIMARY KEY," +
+                    "UserID INT NOT NULL REFERENCES Users(UserID)," +
+                    "description TEXT NOT NULL," +
+                    "roomId INT NOT NULL REFERENCES Rooms(roomId)" +
+                    ")";
+            statement.executeUpdate(createRejectionTable);
 
             //                    "BookingStatus TEXT NOT NULL CHECK (BookingStatus IN ('confirmed', 'canceled'))" +
 

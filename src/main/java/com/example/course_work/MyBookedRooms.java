@@ -1,16 +1,15 @@
 package com.example.course_work;
 import com.example.course_work.database.DBCONN;
 import com.example.course_work.models.BookedRoom;
-import com.example.course_work.models.Room;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
-import com.example.course_work.database.RoomCrud;
+import com.example.course_work.database.Room;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -23,8 +22,8 @@ public class MyBookedRooms {
         public void initialize() {
             try (Connection connection = DBCONN.getConnection()) {
 
-                RoomCrud roomCrud = new RoomCrud(connection);
-                List<BookedRoom> freeRooms = roomCrud.getBookedRoomsForUser(SessionManager.getInstance().getId());
+                Room roomCrud = new Room(connection);
+                List<BookedRoom> freeRooms = roomCrud.getBookedRoomsForUser(Session.getInstance().getId());
 
                 if (freeRooms != null && !freeRooms.isEmpty()) {
                     for (int i = 0; i < freeRooms.size(); i++) {
@@ -58,13 +57,26 @@ public class MyBookedRooms {
                     }
                 } else {
                     System.out.println("Нет свободных комнат.");
+                    showNoRoomsMessage();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
         }
+    private void showNoRoomsMessage() { // Метод для отображения сообщения о том, что нет свободных комнат
+        Label noRoomsLabel = new Label("Ничего не найдено"); // Создаем метку с текстом "Ничего не найдено"
+        noRoomsLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: white;"); // Устанавливаем стиль для метки
 
+        GridPane.setConstraints(noRoomsLabel, 0, 0); // Устанавливаем позицию метки в GridPane
+        GridPane.setColumnSpan(noRoomsLabel, 3); // Разрешаем метке занимать несколько колонок (все три)
+        GridPane.setMargin(noRoomsLabel, new javafx.geometry.Insets(10)); // Устанавливаем отступы вокруг метки
 
+        gridPane.getChildren().clear(); // Очищаем все элементы из gridPane перед добавлением новой метки
+        gridPane.add(noRoomsLabel, 0, 0); // Добавляем метку в GridPane на позицию (0,0)
     }
+
+
+
+}
 

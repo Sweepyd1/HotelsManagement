@@ -1,7 +1,7 @@
 package com.example.course_work;
 
 import com.example.course_work.database.DBCONN;
-import com.example.course_work.database.RoomCrud;
+import com.example.course_work.database.Room;
 //import com.example.course_work.models.BookedRoom;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,8 +10,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
@@ -63,7 +64,7 @@ public class RoomCartController {
 
 
     private void handleAddToCartRoom() throws SQLException {
-        int userId = SessionManager.getInstance().getId();
+        int userId = Session.getInstance().getId();
         System.out.println("Добавлено в корзину: " + roomTitle + ", пользователь ID: " + userId + ", количество дней: " + daysCount);
 
         if (userId <= 0) {
@@ -74,14 +75,14 @@ public class RoomCartController {
         Connection connection = null; // Инициализируем переменную для соединения
         try {
             connection = DBCONN.getConnection(); // Получаем соединение
-            RoomCrud roomCrud = new RoomCrud(connection);
+            Room room = new Room(connection);
 
-            int roomId = roomCrud.getSelectedRoomIdByTitle(roomTitle);
-            LocalDate checkInDate = SessionManager.getInstance().getInDate();
-            LocalDate checkOutDate = SessionManager.getInstance().getOutDate();
+            int roomId = room.getSelectedRoomIdByTitle(roomTitle);
+            LocalDate checkInDate = Session.getInstance().getInDate();
+            LocalDate checkOutDate = Session.getInstance().getOutDate();
 
             // Бронирование комнаты
-            roomCrud.bookRoom(userId, roomId, checkInDate, checkOutDate);
+            room.bookRoom(userId, roomId, checkInDate, checkOutDate);
             System.out.println("выполнено");
             addToCartButton.setText("добавлено в брони");
             addToCartButton.setStyle("-fx-background-color:#9ea5db; -fx-text-fill: white;");
@@ -104,14 +105,16 @@ public class RoomCartController {
 
 
     private void setRoomImage(String imagePath) {
-
         try {
-//            Image image = new Image(getClass().getResourceAsStream("/images/" + imagePath));
-            Image image = new Image(imagePath);
+            File file = new File("src/main/resources/images/" + imagePath);
+            FileInputStream fis = new FileInputStream(file);
+            Image image = new Image(fis);
+            fis.close();
             roomImageView.setImage(image);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Ошибка загрузки изображения: " + e.getMessage());
+            roomImageView.setImage(null);
         }
     }
 

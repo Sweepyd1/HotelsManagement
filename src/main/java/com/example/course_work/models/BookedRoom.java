@@ -10,11 +10,11 @@ public class BookedRoom {
     private String photo;
     private LocalDate indate;
     private LocalDate outdate;
-    private LocalDate bookingdate;
+    private int bookingdate;
 
     // Конструктор для создания забронированной комнаты с указанием всех параметров
     public BookedRoom(String roomNumber, String description, int capacity, double price, String photo,
-                      LocalDate indate, LocalDate outdate, LocalDate bookingdate) {
+                      LocalDate indate, LocalDate outdate, int bookingdate) {
         this.roomNumber = roomNumber;
         this.description = description;
         this.capacity = capacity;
@@ -82,11 +82,11 @@ public class BookedRoom {
         this.outdate = outdate;
     }
 
-    public LocalDate getBookingdate() {
+    public int getBookingdate() {
         return bookingdate;
     }
 
-    public void setBookingdate(LocalDate bookingdate) {
+    public void setBookingdate(int bookingdate) {
         this.bookingdate = bookingdate;
     }
 }

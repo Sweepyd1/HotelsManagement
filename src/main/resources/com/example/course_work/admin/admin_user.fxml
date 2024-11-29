@@ -30,9 +30,9 @@
             <columns>
                 <TableColumn fx:id="user_id" text="ID" />
                 <TableColumn fx:id="username" text="имя" />
-                <TableColumn fx:id="usersurname" text="фамилия" />
+                <TableColumn fx:id="usersurname" text="пароль" />
                 <TableColumn fx:id="userlogin" text="логин" />
-                <TableColumn fx:id="userpassword" text="пароль" />
+                <TableColumn fx:id="userpassword" text="фамилия" />
                 <TableColumn fx:id="user_role" text="Роль" />
             </columns>
             <columnResizePolicy>

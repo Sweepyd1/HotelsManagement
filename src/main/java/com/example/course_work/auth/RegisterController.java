@@ -3,13 +3,12 @@ package com.example.course_work.auth;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import com.example.course_work.App;
-import com.example.course_work.SessionManager;
+import com.example.course_work.Session;
 import com.example.course_work.database.DBCONN;
-import com.example.course_work.database.UserCrud;
+import com.example.course_work.database.User;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
@@ -67,11 +66,11 @@ public class RegisterController {
         }
 
         try (Connection connection = DBCONN.getConnection()) {
-            UserCrud userCrud = new UserCrud(connection);
-            userCrud.createUser(name, password,login,surname,"user");
+            User user = new User(connection);
+            user.createUser(name, password,login,surname,"user");
             try {
 
-                SessionManager.getInstance().setId(userCrud.getUserId(login, password));
+                Session.getInstance().setId(user.getUserId(login, password));
                 switchToMain();
             } catch (IOException e) {
 

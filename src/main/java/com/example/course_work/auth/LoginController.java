@@ -2,13 +2,12 @@ package com.example.course_work.auth;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import com.example.course_work.App;
-import com.example.course_work.SessionManager;
+import com.example.course_work.Session;
 import com.example.course_work.database.DBCONN;
-import com.example.course_work.database.UserCrud;
+import com.example.course_work.database.User;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
@@ -65,14 +64,14 @@ public class LoginController {
 
 
         try (Connection connection = DBCONN.getConnection()) {
-            UserCrud userCrud = new UserCrud(connection);
-            boolean isExist = userCrud.userExists(login, password);
+            User user = new User(connection);
+            boolean isExist = user.userExists(login, password);
 
             if (isExist){
                 try {
-                    SessionManager.getInstance().setId(userCrud.getUserId(login, password));
-                    SessionManager.getInstance().setUserRole(userCrud.getUserRole(login, password));
-                    String role =  SessionManager.getInstance().getUserRole();
+                    Session.getInstance().setId(user.getUserId(login, password));
+                    Session.getInstance().setUserRole(user.getUserRole(login, password));
+                    String role =  Session.getInstance().getUserRole();
                     System.out.println(role);
 
 

@@ -1,27 +1,21 @@
 package com.example.course_work;
 
 import com.example.course_work.database.DBCONN;
-import com.example.course_work.models.Room;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.fxml.FXMLLoader;
 
-import java.awt.*;
 import java.io.IOException;
-import com.example.course_work.database.RoomCrud;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import com.example.course_work.database.Room;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+import javafx.scene.control.Label;
 
-public class AllRoomsController {
+public class AllRooms {
     @FXML
     private GridPane gridPane;
     @FXML
@@ -30,13 +24,13 @@ public class AllRoomsController {
     @FXML
     public void initialize() {
         try (Connection connection = DBCONN.getConnection()) {
-            RoomCrud roomCrud = new RoomCrud(connection);
-            List<Room> freeRooms = roomCrud.getFilteredRooms();
+            Room roomCrud = new Room(connection);
+            List<com.example.course_work.models.Room> freeRooms = roomCrud.getFilteredRooms();
 
             // Проверяем, есть ли свободные комнаты
             if (freeRooms != null && !freeRooms.isEmpty()) {
                 for (int i = 0; i < freeRooms.size(); i++) {
-                    Room room = freeRooms.get(i);
+                    com.example.course_work.models.Room room = freeRooms.get(i);
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("hotel.fxml")); // Укажите правильный путь к вашему FXML
                         VBox roomVBox = loader.load();
@@ -62,6 +56,7 @@ public class AllRoomsController {
                 }
             } else {
                 System.out.println("Нет свободных комнат.");
+                showNoRoomsMessage();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,7 +64,16 @@ public class AllRoomsController {
 
     }
 
+    private void showNoRoomsMessage() { // Метод для отображения сообщения о том, что нет свободных комнат
+        Label noRoomsLabel = new Label("Ничего не найдено"); // Создаем метку с текстом "Ничего не найдено"
+        noRoomsLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: white;"); // Устанавливаем стиль для метки
 
+        GridPane.setConstraints(noRoomsLabel, 0, 0); // Устанавливаем позицию метки в GridPane
+        GridPane.setColumnSpan(noRoomsLabel, 3); // Разрешаем метке занимать несколько колонок (все три)
+        GridPane.setMargin(noRoomsLabel, new javafx.geometry.Insets(10)); // Устанавливаем отступы вокруг метки
 
+        gridPane.getChildren().clear(); // Очищаем все элементы из gridPane перед добавлением новой метки
+        gridPane.add(noRoomsLabel, 0, 0); // Добавляем метку в GridPane на позицию (0,0)
+    }
 
 }

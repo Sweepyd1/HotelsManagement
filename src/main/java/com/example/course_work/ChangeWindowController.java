@@ -1,5 +1,6 @@
 package com.example.course_work;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,7 +12,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.awt.desktop.SystemEventListener;
 import java.time.LocalDate;
 
 public class ChangeWindowController {
@@ -21,6 +21,9 @@ public class ChangeWindowController {
 
     @FXML
     public Button bookings;
+
+    @FXML
+    private Button exitButton;
 
     @FXML
     public Button users;
@@ -40,7 +43,8 @@ public class ChangeWindowController {
     @FXML
     public void initialize() {
         // Проверяем роль пользователя и отображаем кнопку в зависимости от роли
-        if ("admin".equals(SessionManager.getInstance().getUserRole())) {
+
+        if ("admin".equals(Session.getInstance().getUserRole())) {
             adminButton.setVisible(true); // Показываем кнопку для админа
             bookings.setVisible(true);
             users.setVisible(true);
@@ -51,6 +55,13 @@ public class ChangeWindowController {
             users.setVisible(false);
 
         }
+        showBookedPage();
+    }
+
+    @FXML
+    public void handleExit() { // Метод для обработки нажатия кнопки "Выход"
+        Platform.exit(); // Закрывает приложение
+        System.exit(0); // Завершает работу приложения (можно использовать, но не обязательно)
     }
 
     @FXML
@@ -73,9 +84,9 @@ public class ChangeWindowController {
 
         // Proceed only if the filters window was closed without errors
         if (filtersClosed) {
-            LocalDate in = SessionManager.getInstance().getInDate();
-            LocalDate out = SessionManager.getInstance().getOutDate();
-            Boolean wifi = SessionManager.getInstance().isWifi();
+            LocalDate in = Session.getInstance().getInDate();
+            LocalDate out = Session.getInstance().getOutDate();
+            Boolean wifi = Session.getInstance().isWifi();
 
             System.out.println(in);
             System.out.println(out);

@@ -1,9 +1,9 @@
 package com.example.course_work.controller.admin;
 
 
+import com.example.course_work.Session;
 import com.example.course_work.database.DBCONN;
-import com.example.course_work.database.UserCrud;
-import com.example.course_work.models.User;
+import com.example.course_work.database.User;
 import com.example.course_work.models.UserForAdmin;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -16,10 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import com.example.course_work.database.RoomCrud;
-import javafx.stage.FileChooser;
 
-import java.io.File;
 import java.sql.Connection;
 
 import java.sql.SQLException;
@@ -79,13 +76,13 @@ public class AdminUserController {
     private void handleAddButtonAction() {
 
         try (Connection connection = DBCONN.getConnection()) {
-            UserCrud userCrud = new UserCrud(connection);
+            User user = new User(connection);
 
             String[] userDetails = showInputDialog("Добавить комнату", "Введите данные комнаты:");
             if (userDetails != null) {
                 System.out.println(userDetails[0]);
 
-                userCrud.createUser(userDetails[0], userDetails[1], userDetails[2], userDetails[3], userDetails[4]);
+                user.createUser(userDetails[0], userDetails[1], userDetails[2], userDetails[3], userDetails[4]);
                 data.clear();
                 loadAlldata();
             }
@@ -100,25 +97,23 @@ public class AdminUserController {
     private void handleEditButtonAction() throws SQLException {
         String[] selectedRoom = tableView.getSelectionModel().getSelectedItem();
         if (selectedRoom != null) {
-            System.out.println(selectedRoom[5]);
+            System.out.println(selectedRoom[0]);
 
             String[] updatedDetails = showInputDialog("Редактировать комнату", "Введите новые данные комнаты:", selectedRoom);
             if (updatedDetails != null) {
 
                 try (Connection connection = DBCONN.getConnection()) {
-                    RoomCrud roomCrud = new RoomCrud(connection);
+                    User user = new User(connection);
 
-                    int index2 = Integer.parseInt(updatedDetails[2]); // Convert index 2 to int
-                    int index3 = Integer.parseInt(updatedDetails[3]); // Convert index 3 to int
-                    int index5 = Integer.parseInt(updatedDetails[5]); // Convert index 5 to int
-                    roomCrud.updateRoomData(updatedDetails[0], updatedDetails[1], index2, index3, updatedDetails[4], index5, selectedRoom[0]);
+
+                    user.updateUser(Integer.parseInt(selectedRoom[0]),updatedDetails[0], updatedDetails[1], updatedDetails[2], updatedDetails[3],updatedDetails[4]);
                 }
                 catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
 
-                int index = data.indexOf(selectedRoom);
-                data.set(index, updatedDetails);
+                data.clear();
+                loadAlldata();
             }
         } else {
             showAlert("Ошибка", "Пожалуйста, выберите комнату для редактирования.");
@@ -129,8 +124,12 @@ public class AdminUserController {
     private void handleDeleteButtonAction() {
         String[] selectedRoom = tableView.getSelectionModel().getSelectedItem();
         if (selectedRoom != null) {
+            if(Session.getInstance().getId() == Integer.parseInt(selectedRoom[0])){
+                showAlert("ошибка","удалять себя нельзя");
+                return;
+            }
             try (Connection connection = DBCONN.getConnection()) {
-                UserCrud roomCrud = new UserCrud(connection);
+                User roomCrud = new User(connection);
                 roomCrud.deleteUser(Integer.parseInt(selectedRoom[0]));
             }
             catch (SQLException e) {
@@ -185,10 +184,6 @@ public class AdminUserController {
         TextField photoField = new TextField(defaultValues != null ? defaultValues[4] : "");
         TextField serviceField = new TextField(defaultValues != null ? defaultValues[5] : "");
 
-
-
-
-
         GridPane grid = new GridPane();
 
         grid.add(new Label("Роль пользователя"), 0, 0);
@@ -197,17 +192,14 @@ public class AdminUserController {
         grid.add(new Label("имя:"), 0, 1);
         grid.add(descriptionField, 1, 1);
 
-        grid.add(new Label("фамилия:"), 0, 2);
+        grid.add(new Label("пароль:"), 0, 2);
         grid.add(capacityField, 1, 2);
 
         grid.add(new Label("логин"), 0, 3);
         grid.add(costField, 1, 3);
 
-        grid.add(new Label("пароль"), 0, 4);
+        grid.add(new Label("фамилия"), 0, 4);
         grid.add(photoField, 1, 4);
-
-        // Add the button to the grid instead of the FileChooser
-
 
         dialog.getDialogPane().setContent(grid);
 
@@ -233,7 +225,7 @@ public class AdminUserController {
 
     public void loadAlldata() {
         try (Connection connection = DBCONN.getConnection()) {
-            UserCrud userCrud = new UserCrud(connection);
+            User userCrud = new User(connection);
             List<UserForAdmin> userData = userCrud.getAllUserData(); // Fetch all rooms
             for (UserForAdmin user : userData) {
                 String[] roomDetails = new String[6]; // Adjust size based on your columns

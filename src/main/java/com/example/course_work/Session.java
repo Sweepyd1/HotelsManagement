@@ -2,16 +2,14 @@ package com.example.course_work;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 
 
 import java.time.LocalDate;
-import com.example.course_work.ChangeWindowController;
 
 
-public class SessionManager {
+public class Session {
 
-    public static SessionManager instance;
+    public static Session instance;
 
     public int userId;
     public String userRole;
@@ -59,12 +57,12 @@ public class SessionManager {
     private Spinner<Integer> capacitySpinner;
 
     // Приватный конструктор для предотвращения создания экземпляров извне
-    public SessionManager() {}
+    public Session() {}
 
     // Метод для получения единственного экземпляра класса
-    public static SessionManager getInstance() {
+    public static Session getInstance() {
         if (instance == null) {
-            instance = new SessionManager();
+            instance = new Session();
         }
         return instance;
     }
@@ -196,16 +194,17 @@ public class SessionManager {
         int selectedCapacity = capacitySpinner.getValue(); // Получаем выбранное количество мест
 
         // Устанавливаем значения в SessionManager
-        SessionManager sessionManager = SessionManager.getInstance();
-        sessionManager.setInDate(checkInDate);
-        sessionManager.setOutDate(checkOutDate);
-        sessionManager.setMinPrice(minPrice);
-        sessionManager.setMaxPrice(maxPrice);
-        sessionManager.setWifi(wifi);
-        sessionManager.setBreakfast(breakfast);
-        sessionManager.setSpa(spa);
-        sessionManager.setPetFriendly(petFriendly);
-        sessionManager.setCapacity(selectedCapacity);
+        Session session = Session.getInstance();
+        session.setInDate(checkInDate);
+        session.setOutDate(checkOutDate);
+        session.setMinPrice(minPrice);
+        session.setMaxPrice(maxPrice);
+        session.setWifi(wifi);
+        session.setBreakfast(breakfast);
+        session.setSpa(spa);
+        session.setPetFriendly(petFriendly);
+        session.setCapacity(selectedCapacity);
+
 
 
 
